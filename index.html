@@ -53,10 +53,33 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .modal.on{display:flex}
 .modal>div{background:var(--card);width:100%;max-width:640px;border-radius:20px 20px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px));max-height:90vh;overflow:auto}
 .btn.sec{background:none;color:var(--mut);border:1px solid var(--line);margin-top:8px}
+body.locked header,body.locked main,body.locked nav{display:none!important}
+#gate{display:none;position:fixed;inset:0;background:#121212;color:#e8d5c4;align-items:center;justify-content:center;padding:24px;z-index:99;text-align:center}
+body.locked #gate{display:flex}
+#gate>div{width:100%;max-width:380px}
+#gate b{font:800 2.4rem Georgia,"Times New Roman",serif;letter-spacing:.04em;display:block}
+#gate p{color:#cdb8a6;margin:8px 0 22px}
+#gate input{text-align:center;letter-spacing:.12em;font-size:1.15rem;text-transform:uppercase;background:#1d1b1a;color:#f1e6db;border:1px solid #c8a98b}
+#gate button{background:#e8d5c4;color:#121212;border:0;border-radius:999px;padding:13px 22px;font-weight:700;width:100%;margin-top:14px}
+#gate button:disabled{opacity:.5}
+#gate .msg{min-height:1.4em;margin-top:12px;color:#ff8a80;font-size:.92rem}
+#gate small{display:block;margin-top:26px;color:#a89a8d}
+.pg{border:1px solid var(--line);background:none;color:var(--mut);border-radius:999px;padding:3px 10px;font-size:.78rem;margin-right:6px;white-space:nowrap}
+.pg.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.pg.no{border-color:var(--bad);color:var(--bad)}
+.chk{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:.92rem;color:var(--ink)}
+.chk input{width:22px;height:22px;flex:none;padding:0}
 details summary{cursor:pointer;color:var(--mut);font-size:.9rem}
 </style>
 </head>
-<body>
+<body class="locked">
+<div id="gate"><div>
+<b>ÉR$CA</b><p>Digite o código de acesso que você recebeu na compra.</p>
+<label for="gcode" style="position:absolute;left:-9999px">Código de acesso</label>
+<input id="gcode" placeholder="ERCA-XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="20">
+<button id="gbtn">Entrar</button><div class="msg" id="gmsg" role="alert"></div>
+<small>Ainda não tem o código? Fale com @ericamarques.financas</small>
+</div></div>
 <header><b>ÉR$CA</b><p>Ainda dá tempo de organizar a sua vida.</p></header>
 <main>
 <section id="resumo" class="on">
@@ -66,6 +89,10 @@ details summary{cursor:pointer;color:var(--mut);font-size:.9rem}
     <div class="row"><span>💰 Renda</span><b id="tRenda"></b></div>
     <div class="row"><span>🏠 Gastos fixos</span><b id="tFixos"></b></div>
     <div class="row"><span>🛍️ Gastos variáveis</span><b id="tVar"></b></div></div>
+  <div class="card"><b>Contas do mês: pagas e a pagar</b>
+    <div class="row"><span>✅ Pagas</span><b id="tPago" class="pos"></b></div>
+    <div class="row"><span>⏳ A pagar</span><b id="tAPagar" class="neg"></b></div>
+    <div id="lAPagar"></div></div>
   <div class="card"><b>Variáveis por categoria</b><div id="cats"></div></div>
   <div class="card"><b>Backup dos dados</b><p class="mut" style="margin:6px 0 0">Seus dados ficam só neste aparelho. Toque em "Gerar backup", copie o texto e guarde no app Notas ou mande para você mesma no WhatsApp. Para restaurar, cole o texto na caixa e toque em "Restaurar".</p>
     <textarea id="bt" rows="4" placeholder="O backup aparece aqui. Para restaurar, cole o texto aqui." aria-label="Texto do backup" style="margin-top:10px"></textarea>
@@ -80,6 +107,7 @@ details summary{cursor:pointer;color:var(--mut);font-size:.9rem}
     <div><label for="gv">Valor (R$)</label><input type="number" id="gv" inputmode="decimal" min="0" step="0.01" placeholder="0,00"></div></div>
     <label for="gc">Categoria</label><select id="gc"></select>
     <label for="gn">Descrição (opcional)</label><input id="gn" maxlength="60" placeholder="Ex.: compras da semana">
+    <label class="chk"><input type="checkbox" id="gp" checked>Já paguei este gasto</label>
     <button class="btn" id="addG">Adicionar gasto</button>
     <details style="margin-top:12px"><summary>Gerenciar categorias</summary>
       <div id="lCats" style="margin-top:8px"></div>
@@ -94,8 +122,9 @@ details summary{cursor:pointer;color:var(--mut);font-size:.9rem}
   <div class="card"><b>Renda mensal</b><div id="lRenda"></div>
     <div class="two"><input id="rn" placeholder="Fonte" maxlength="40" aria-label="Fonte de renda"><input id="rv" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Valor" aria-label="Valor da renda"></div>
     <button class="btn" data-add="renda">Adicionar renda</button></div>
-  <div class="card"><b>Gastos fixos</b><div id="lFixos"></div>
+  <div class="card"><b>Gastos fixos</b><p class="mut" id="fmes" style="margin:4px 0 0"></p><div id="lFixos"></div>
     <div class="two"><input id="fn" placeholder="Conta" maxlength="40" aria-label="Nome da conta"><input id="fv" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Valor" aria-label="Valor da conta"></div>
+    <label class="chk"><input type="checkbox" id="fp">Já está paga neste mês</label>
     <button class="btn" data-add="fixos">Adicionar gasto fixo</button></div>
 </section>
 
@@ -135,25 +164,39 @@ $("mes").value=today.slice(0,7);$("gd").value=today;
 function mesG(){return S.gastos.filter(function(g){return g.d.slice(0,7)===$("mes").value})}
 function rm(arr,i){S[arr].splice(i,1);save();draw()}
 window.rm=rm;
+function fixPago(x){return !!(x.pg&&x.pg[$("mes").value])}
+function gasPago(g){return g.p!==false}
+function tgl(arr,i){var x=S[arr][i];
+  if(arr==="fixos"){x.pg=x.pg||{};var m=$("mes").value;if(x.pg[m])delete x.pg[m];else x.pg[m]=true}
+  else x.p=!gasPago(x);
+  save();draw()}
+window.tgl=tgl;
+function pgBtn(arr,i,ok){return '<button class="pg '+(ok?'ok':'no')+'" aria-label="'+(ok?'Marcar como não paga':'Marcar como paga')+'" onclick="tgl(\''+arr+'\','+i+')">'+(ok?'✔ Paga':'Não paga')+'</button>'}
 function listSimple(id,arr){
-  $(id).innerHTML=S[arr].length?S[arr].map(function(x,i){return '<div class="row"><span>'+esc(x.n)+'</span><span><b>'+R(x.v)+'</b><button class="ed" aria-label="Editar" onclick="ed(\''+arr+'\','+i+')">✏️</button><button class="x" aria-label="Remover" onclick="rm(\''+arr+'\','+i+')">✕</button></span></div>'}).join(""):'<p class="mut">Nada por aqui ainda.</p>'}
+  $(id).innerHTML=S[arr].length?S[arr].map(function(x,i){return '<div class="row"><span>'+esc(x.n)+'</span><span>'+(arr==="fixos"?pgBtn("fixos",i,fixPago(x)):"")+'<b>'+R(x.v)+'</b><button class="ed" aria-label="Editar" onclick="ed(\''+arr+'\','+i+')">✏️</button><button class="x" aria-label="Remover" onclick="rm(\''+arr+'\','+i+')">✕</button></span></div>'}).join(""):'<p class="mut">Nada por aqui ainda.</p>'}
 function draw(){
   var tr=sum(S.renda),tf=sum(S.fixos),mg=mesG(),tv=sum(mg),s=tr-tf-tv;
   $("tRenda").textContent=R(tr);$("tFixos").textContent=R(tf);$("tVar").textContent=R(tv);
   $("sobra").textContent=R(s);$("sobra").className="big "+(s>=0?"pos":"neg");$("status").textContent=tr===0?"👋 Comece cadastrando sua renda em Fixos":(s>=0?"✅ Mês positivo: o dinheiro está sobrando":"⚠️ Atenção: o mês fechou negativo");
+  var mm=$("mes").value,pago=0,apag=0,pend=[];
+  S.fixos.forEach(function(x){if(fixPago(x))pago+=Number(x.v||0);else{apag+=Number(x.v||0);pend.push({n:x.n,v:x.v,t:"Fixa"})}});
+  mg.forEach(function(g){if(gasPago(g))pago+=Number(g.v||0);else{apag+=Number(g.v||0);pend.push({n:(g.n||g.c),v:g.v,t:"Diário"})}});
+  $("tPago").textContent=R(pago);$("tAPagar").textContent=R(apag);
+  $("lAPagar").innerHTML=pend.length?'<p class="mut" style="margin:10px 0 2px">Ainda falta pagar:</p>'+pend.map(function(p){return '<div class="row"><span>'+esc(p.n)+' <span class="mut">· '+p.t+'</span></span><b>'+R(p.v)+'</b></div>'}).join(""):((S.fixos.length||mg.length)?'<p class="mut" style="margin:10px 0 0">🎉 Tudo pago neste mês.</p>':'<p class="mut" style="margin:10px 0 0">Cadastre contas em Fixos ou no Diário.</p>');
+  $("fmes").textContent="Status de pagamento de "+mm.slice(5)+"/"+mm.slice(0,4)+" (para mudar o mês, use a aba Resumo).";
   var by={};mg.forEach(function(g){by[g.c]=(by[g.c]||0)+Number(g.v)});
   var keys=Object.keys(by).sort(function(a,b){return by[b]-by[a]});
   $("cats").innerHTML=keys.length?keys.map(function(c){var pc=tv?by[c]/tv*100:0;return '<div style="margin-top:12px"><div class="row" style="border:0;padding:0"><span>'+esc(c)+'</span><b>'+R(by[c])+'</b></div><div class="bar"><i style="width:'+pc.toFixed(0)+'%"></i></div></div>'}).join(""):'<p class="mut">Anote seus gastos no Diário para ver aqui.</p>';
-  $("gc").innerHTML=S.cats.map(function(c){return "<option>"+esc(c)+"</option>"}).join("");
+  $("gc").innerHTML=S.cats.map(function(c){return "<option>"+esc(c)+"</option>"}).join("")+'<option value="__nova">➕ Nova categoria…</option>';
   $("lCats").innerHTML=S.cats.map(function(c,i){return '<div class="row"><span>'+esc(c)+'</span><span><button class="ed" aria-label="Editar categoria" onclick="ed(\'cats\','+i+')">✏️</button><button class="x" aria-label="Excluir categoria" onclick="dc('+i+')">✕</button></span></div>'}).join("");
   var ord=S.gastos.map(function(g,i){return{g:g,i:i}}).filter(function(o){return o.g.d.slice(0,7)===$("mes").value}).sort(function(a,b){return b.g.d.localeCompare(a.g.d)});
-  $("lista").innerHTML=ord.length?ord.map(function(o){var g=o.g,dt=g.d.split("-").reverse().slice(0,2).join("/");return '<div class="row"><span>'+dt+' · '+esc(g.c)+(g.n?'<br><span class="mut">'+esc(g.n)+'</span>':'')+'</span><span><b>'+R(g.v)+'</b><button class="ed" aria-label="Editar" onclick="ed(\'gastos\','+o.i+')">✏️</button><button class="x" aria-label="Remover" onclick="rm(\'gastos\','+o.i+')">✕</button></span></div>'}).join(""):'<p class="mut">Nenhum gasto neste mês.</p>';
+  $("lista").innerHTML=ord.length?ord.map(function(o){var g=o.g,dt=g.d.split("-").reverse().slice(0,2).join("/");return '<div class="row"><span>'+dt+' · '+esc(g.c)+(g.n?'<br><span class="mut">'+esc(g.n)+'</span>':'')+'</span><span>'+pgBtn("gastos",o.i,gasPago(g))+'<b>'+R(g.v)+'</b><button class="ed" aria-label="Editar" onclick="ed(\'gastos\','+o.i+')">✏️</button><button class="x" aria-label="Remover" onclick="rm(\'gastos\','+o.i+')">✕</button></span></div>'}).join(""):'<p class="mut">Nenhum gasto neste mês.</p>';
   listSimple("lRenda","renda");listSimple("lFixos","fixos");
   $("lMetas").innerHTML=S.metas.length?S.metas.map(function(m,i){var falta=Math.max(m.a-m.g,0),pc=m.a?Math.min(m.g/m.a*100,100):0,meses=falta===0?"Meta concluída 🎉":(m.p>0?"Faltam "+R(falta)+" · cerca de "+Math.ceil(falta/m.p)+" meses":"Faltam "+R(falta)+" · defina o aporte mensal");return '<div class="card"><div class="row" style="border:0;padding:0"><b>'+esc(m.n)+'</b><span><button class="ed" aria-label="Editar" onclick="ed(\'metas\','+i+')">✏️</button><button class="x" aria-label="Remover" onclick="rm(\'metas\','+i+')">✕</button></span></div><div class="mut">'+R(m.g)+' de '+R(m.a)+'</div><div class="bar g"><i style="width:'+pc.toFixed(0)+'%"></i></div><p class="mut" style="margin:8px 0 0">'+meses+'</p></div>'}).join(""):'<p class="mut">Crie sua primeira meta, como a reserva de emergência.</p>'}
 document.querySelectorAll("nav button").forEach(function(b){b.onclick=function(){document.querySelectorAll("nav button,section").forEach(function(e){e.classList.remove("on")});b.classList.add("on");$(b.dataset.tab).classList.add("on");window.scrollTo(0,0)}});
 $("mes").onchange=draw;
-$("addG").onclick=function(){var v=parseFloat($("gv").value);if(!(v>0)||!$("gd").value){$("gv").focus();return}S.gastos.push({d:$("gd").value,c:$("gc").value,n:$("gn").value.trim(),v:v});$("gv").value="";$("gn").value="";save();draw()};
-document.querySelectorAll("[data-add]").forEach(function(b){b.onclick=function(){var t=b.dataset.add,p=t==="renda"?"r":"f",n=$(p+"n").value.trim(),v=parseFloat($(p+"v").value);if(!n||!(v>0))return;S[t].push({n:n,v:v});$(p+"n").value="";$(p+"v").value="";save();draw()}});
+$("addG").onclick=function(){var v=parseFloat($("gv").value);if(!(v>0)||!$("gd").value||$("gc").value==="__nova"){$("gv").focus();return}S.gastos.push({d:$("gd").value,c:$("gc").value,n:$("gn").value.trim(),v:v,p:$("gp").checked});$("gp").checked=true;$("gv").value="";$("gn").value="";save();draw()};
+document.querySelectorAll("[data-add]").forEach(function(b){b.onclick=function(){var t=b.dataset.add,p=t==="renda"?"r":"f",n=$(p+"n").value.trim(),v=parseFloat($(p+"v").value);if(!n||!(v>0))return;var it={n:n,v:v};if(t==="fixos"){if($("fp").checked){it.pg={};it.pg[$("mes").value]=true}$("fp").checked=false}S[t].push(it);$(p+"n").value="";$(p+"v").value="";save();draw()}});
 $("addM").onclick=function(){var n=$("mn").value.trim(),a=parseFloat($("ma").value);if(!n||!(a>0))return;S.metas.push({n:n,a:a,g:parseFloat($("mg").value)||0,p:parseFloat($("mp").value)||0});["mn","ma","mg","mp"].forEach(function(i){$(i).value=""});save();draw()};
 var EDT=null;
 function fld(id,lb,val,type,extra){return '<label for="'+id+'">'+lb+'</label><input id="'+id+'" type="'+type+'" value="'+esc(String(val==null?"":val)).replace(/"/g,"&quot;")+'" '+(extra||"")+'>'}
@@ -208,10 +251,45 @@ $("rs").onclick=function(){var txt=$("bt").value.trim();if(!txt){alert("Cole o t
     if(!confirm("Isso substitui os dados atuais pelos do backup. Continuar?"))return;
     S.renda=d.renda;S.fixos=d.fixos;S.gastos=d.gastos;S.metas=d.metas;S.cats=(Array.isArray(d.cats)&&d.cats.length)?d.cats:DEF.slice();
     save();draw();$("bt").value="";alert("Backup restaurado!")}catch(e){alert("Texto de backup inválido.")}};
+$("gc").onchange=function(){if(this.value!=="__nova")return;
+  var nm=(prompt("Nome da nova categoria (ex.: Lavagem de carro, Supermercado):")||"").trim().slice(0,30);
+  if(!nm){this.selectedIndex=0;return}
+  var ex=S.cats.filter(function(c){return c.toLowerCase()===nm.toLowerCase()})[0];
+  if(!ex){S.cats.push(nm);save();ex=nm}
+  draw();$("gc").value=ex};
 draw();
 </script>
 <script>
 if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}
 </script>
+<script>
+(function(){
+var KA="erca_acesso",fails=0,LIST=null,$g=function(i){return document.getElementById(i)};
+function unlock(){document.body.classList.remove("locked")}
+function lock(m){document.body.classList.add("locked");$g("gmsg").textContent=m||""}
+async function sha(t){var b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,"0")}).join("")}
+function norm(s){s=String(s).toUpperCase().replace(/[^A-Z0-9]/g,"");if(s.length===12&&s.indexOf("ERCA")===0)s=s.slice(4);return s}
+function load(){return fetch("acessos.js",{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){
+  var m=t.replace(/\/\/.*$/gm,"").match(/"[0-9a-f]{64}"/g)||[];LIST=m.map(function(x){return x.slice(1,-1)});return LIST}).catch(function(){LIST=null;return null})}
+var st=null;try{st=localStorage.getItem(KA)}catch(e){}
+if(st)unlock();
+load().then(function(l){
+  if(st){if(l&&l.indexOf(st)<0){try{localStorage.removeItem(KA)}catch(e){}lock("Este código não está mais ativo. Fale com @ericamarques.financas")}}
+  else if(!l)lock("Não foi possível verificar o acesso. Conecte-se à internet e tente de novo.");
+});
+async function enter(){
+  var c=norm($g("gcode").value);if(c.length!==8){$g("gmsg").textContent="Digite o código completo (ex.: ERCA-XXXX-XXXX).";return}
+  if(!(window.crypto&&crypto.subtle)){$g("gmsg").textContent="Este navegador não consegue verificar o código. Abra o link no Chrome ou no Safari.";return}
+  var l=await load();if(!l){$g("gmsg").textContent="Sem conexão para verificar. Tente de novo com internet.";return}
+  var h=await sha("erca|"+c);
+  if(l.indexOf(h)>=0){try{localStorage.setItem(KA,h)}catch(e){}st=h;$g("gmsg").textContent="";unlock();window.scrollTo(0,0)}
+  else{fails++;$g("gmsg").textContent="Código inválido. Confira e tente de novo.";
+    if(fails>=5){$g("gbtn").disabled=true;$g("gmsg").textContent="Muitas tentativas. Aguarde 30 segundos.";setTimeout(function(){fails=0;$g("gbtn").disabled=false;$g("gmsg").textContent=""},30000)}}
+}
+$g("gbtn").onclick=enter;
+$g("gcode").addEventListener("keydown",function(e){if(e.key==="Enter")enter()});
+})();
+</script>
+
 </body>
 </html>
