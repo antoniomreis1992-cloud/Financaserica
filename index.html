@@ -138,18 +138,48 @@ nav button.on{background:rgba(232,213,196,.15);color:#e8d5c4}
 
 .qm{display:inline-grid;place-items:center;width:18px;height:18px;border:1px solid currentColor;border-radius:50%;font-size:.7rem;margin-right:7px;vertical-align:1px}
 .chk input{accent-color:var(--btn)}
+
+/* ===== v3: análise, metas, relatório ===== */
+.hl{background:var(--field);border-left:4px solid var(--bronze);border-radius:10px;padding:10px 12px;margin:10px 0 2px;font-size:.92rem}
+.top b{font-weight:800}
+.top .bar i{background:linear-gradient(90deg,#9a7656,#6f5238)}
+.seg2{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--field);border:1px solid var(--line);border-radius:999px;padding:4px;margin:10px 0}
+.seg2 button{border:0;background:none;color:var(--mut);border-radius:999px;padding:10px 6px;font-weight:600;transition:background .2s,color .2s}
+.seg2 button[aria-pressed="true"]{background:var(--btn);color:var(--btnfg)}
+svg.radar,svg.mchart{width:100%;height:auto;display:block}
+.rg{fill:none;stroke:var(--line);stroke-width:1}
+.rg.rm{stroke:var(--bronze);stroke-dasharray:4 3}
+.rax{stroke:var(--line);stroke-width:1}
+.rpoly{fill:rgba(200,169,139,.38);stroke:var(--bronze-d);stroke-width:2;stroke-linejoin:round}
+.rdot{fill:var(--bronze-d)}
+.ct{fill:var(--mut);font:11px system-ui,sans-serif}
+.ctb{fill:var(--ink);font:700 11px system-ui,sans-serif}
+.br{fill:#4fae7a}.bd{fill:var(--bronze-d)}
+.leg{display:flex;gap:16px;font-size:.85rem;margin:6px 0}
+.pct{font:700 1.5rem Georgia,"Times New Roman",serif;color:var(--ok)}
+.hs{display:flex;align-items:baseline;gap:10px;margin:6px 0 2px}
+.hs b{font:800 2.2rem Georgia,"Times New Roman",serif}
+.ax{margin:12px 0}
+.ax .row{border:0;padding:0}
+#dNova>summary{font-weight:700;color:var(--ink);font-size:1rem;list-style:none;cursor:pointer}
+#dNova>summary::-webkit-details-marker{display:none}
+nav button{font-size:.66rem}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+.lg{display:block;margin:0 auto;height:auto}
+#gate .lg{width:min(86%,300px);margin-bottom:6px}
+header .lg{width:170px;margin:2px 0 0;max-width:60%}
+.lgf{width:150px;height:auto;background:#121212;border-radius:14px;padding:8px 14px;margin-bottom:8px}
 </style>
 </head>
 <body class="locked">
 <div id="gate"><div>
-<b>ÉR$CA</b><p>Digite o código de acesso que você recebeu na compra.</p>
+<img class="lg" src="logo-erca.png" alt="ÉR$CA - Organize, planeje, conquiste"><p>Digite o código de acesso que você recebeu na compra.</p>
 <label for="gcode" style="position:absolute;left:-9999px">Código de acesso</label>
 <input id="gcode" placeholder="ERCA-XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="20">
 <button id="gbtn">Entrar</button><div class="msg" id="gmsg" role="alert"></div>
 <small>Ainda não tem o código? Fale com @ericamarques.financas</small>
 </div></div>
-<header><button class="hb" id="bGuia" aria-label="Abrir o guia: como usar o aplicativo"><span class="qm">?</span>Como usar</button><b>ÉR$CA</b><p>Ainda dá tempo de organizar a sua vida.</p></header>
+<header><button class="hb" id="bGuia" aria-label="Abrir o guia: como usar o aplicativo"><span class="qm">?</span>Como usar</button><img class="lg" src="logo-erca.png" alt="ÉR$CA"><p>Ainda dá tempo de organizar a sua vida.</p></header>
 <main>
 <section id="resumo" class="on">
   <h2>Resumo do mês</h2>
@@ -164,7 +194,8 @@ nav button.on{background:rgba(232,213,196,.15);color:#e8d5c4}
     <div class="duo"><div><span class="mut">Pagas</span><b id="tPago" class="pos"></b></div><div><span class="mut">A pagar</span><b id="tAPagar" class="neg"></b></div></div>
     <div class="bar g" aria-hidden="true"><i id="pBar" style="width:0%"></i></div>
     <div id="lAPagar"></div></div>
-  <div class="card"><b>Variáveis por categoria</b><div id="cats"></div></div>
+  <div class="card"><b>Variáveis por categoria</b><div id="hl"></div><div id="cats"></div></div>
+  <div class="card"><b>Relatório em PDF</b><p class="mut" style="margin:6px 0 0">Gera um PDF do mês com resumo, categorias, gráfico, radar, metas e lançamentos. Depois você escolhe onde salvar ou para quem enviar.</p><button class="btn pdfbtn">Exportar PDF</button></div>
   <div class="card"><b>Backup dos dados</b><p class="mut" style="margin:6px 0 0">Seus dados ficam só neste aparelho. Toque em "Gerar backup", copie o texto e guarde no app Notas ou mande para você mesma no WhatsApp. Para restaurar, cole o texto na caixa e toque em "Restaurar".</p>
     <textarea id="bt" rows="4" placeholder="O backup aparece aqui. Para restaurar, cole o texto aqui." aria-label="Texto do backup" style="margin-top:10px"></textarea>
     <button class="btn" id="bk">Gerar backup</button><button class="btn sec" id="rs">Restaurar backup</button></div>
@@ -201,13 +232,27 @@ nav button.on{background:rgba(232,213,196,.15);color:#e8d5c4}
 
 <section id="metas">
   <h2>Metas</h2>
-  <div class="card">
+  <div class="card" id="mGeral"></div>
+  <details class="card" id="dNova"><summary>+ Nova meta</summary>
     <label for="mn">Meta</label><input id="mn" maxlength="40" placeholder="Ex.: reserva de emergência">
     <div class="two"><div><label for="ma">Valor alvo (R$)</label><input id="ma" type="number" inputmode="decimal" min="0" step="0.01"></div>
     <div><label for="mg">Já guardado (R$)</label><input id="mg" type="number" inputmode="decimal" min="0" step="0.01"></div></div>
     <label for="mp">Aporte mensal (R$)</label><input id="mp" type="number" inputmode="decimal" min="0" step="0.01">
-    <button class="btn" id="addM">Adicionar meta</button></div>
+    <button class="btn" id="addM">Adicionar meta</button></details>
   <div id="lMetas"></div>
+</section>
+
+<section id="analise">
+  <h2>Análise</h2>
+  <div class="card"><b>Receitas e despesas</b><p class="mut" style="margin:4px 0 8px">Os 6 meses até o mês escolhido no Resumo.</p>
+    <div id="chart"></div>
+    <div class="leg"><span><i class="dot" style="background:#4fae7a"></i>Receitas</span><span><i class="dot" style="background:#9a7656"></i>Despesas (fixos e variáveis)</span></div>
+    <details><summary>Ver valores</summary><div id="chartTab"></div></details>
+    <p class="mut" style="margin:10px 0 0;font-size:.84rem">Renda e gastos fixos valem para todos os meses. O que muda de mês para mês são os gastos do Diário.</p></div>
+  <div class="card"><b>Radar de saúde financeira</b>
+    <div class="seg2" role="group" aria-label="Referência"><button data-ref="mundo" aria-pressed="true">Mundial</button><button data-ref="brasil" aria-pressed="false">Brasil</button></div>
+    <div id="radar"></div><div id="hScore"></div><div id="hList"></div><p class="mut" id="hNota" style="font-size:.84rem"></p></div>
+  <div class="card"><b>Relatório em PDF</b><p class="mut" style="margin:6px 0 0">Resumo, categorias, gráfico, radar, metas e lançamentos do mês em um arquivo.</p><button class="btn pdfbtn">Exportar PDF</button></div>
 </section>
 <section id="desafio">
   <h2>Cofre Desafio 10 mil</h2>
@@ -220,7 +265,7 @@ nav button.on{background:rgba(232,213,196,.15);color:#e8d5c4}
     <button class="btn sec" id="dReset">Zerar desafio</button>
   </div>
 </section>
-<p class="foot">@ericamarques.financas · ÉR$CA<br>Conteúdo educativo. Não substitui orientação financeira individual.</p>
+<p class="foot"><img class="lgf" src="logo-erca.png" alt="ÉR$CA"><br>@ericamarques.financas · ÉR$CA<br>Conteúdo educativo. Não substitui orientação financeira individual.</p>
 </main>
 <div id="guia" role="dialog" aria-modal="true" aria-labelledby="gt"><div class="in">
 <h1 id="gt">Como usar o ÉR$CA</h1>
@@ -237,7 +282,8 @@ nav button.on{background:rgba(232,213,196,.15);color:#e8d5c4}
 <p>É a tela principal. Escolha o <b>mês</b> no topo e tudo se ajusta a ele.</p>
 <ul><li><b>Sobra (ou falta) no mês:</b> renda menos gastos fixos menos gastos variáveis. Verde = está sobrando. Vermelho = o mês fechou negativo. A conta <b>desconta todas as contas</b>, estejam pagas ou não.</li>
 <li><b>Contas do mês:</b> mostra quanto já foi <b>pago</b>, quanto está <b>a pagar</b> e a lista do que ainda falta pagar.</li>
-<li><b>Variáveis por categoria:</b> barras que mostram onde você mais gasta.</li>
+<li><b>Variáveis por categoria:</b> barras que mostram onde você mais gasta. Um aviso no topo destaca a <b>categoria com maior gasto</b> do mês.</li>
+<li><b>Relatório em PDF:</b> toque em <b>Exportar PDF</b> para gerar um arquivo do mês, com resumo, gráfico, radar, metas e lançamentos. Escolha onde salvar ou envie pelo WhatsApp.</li>
 <li><b>Backup dos dados:</b> toque em <b>Gerar backup</b> para copiar um texto com todos os seus dados. Cole no app <b>Notas</b> ou mande para você mesma no WhatsApp. Para recuperar, cole o texto na caixa e toque em <b>Restaurar backup</b>.</li></ul></div>
 
 <div class="card"><h3>✍️ Diário</h3>
@@ -255,8 +301,13 @@ nav button.on{background:rgba(232,213,196,.15);color:#e8d5c4}
 
 <div class="card"><h3>🎯 Metas</h3>
 <p>Para guardar dinheiro com um objetivo (reserva de emergência, viagem, etc.).</p>
-<ol><li>Dê um nome à meta e informe o <b>valor alvo</b>.</li><li>Informe <b>quanto já guardou</b> e o <b>aporte mensal</b> (quanto pretende guardar por mês).</li></ol>
-<p>O app mostra quanto falta, uma barra de progresso e <b>em cerca de quantos meses</b> você chega lá. Quando guardar mais, toque no <b>✏️</b> e atualize o valor "já guardado".</p></div>
+<ol><li>Toque em <b>+ Nova meta</b>, dê um nome e informe o <b>valor alvo</b>.</li><li>Informe <b>quanto já guardou</b> e o <b>aporte mensal</b> (quanto pretende guardar por mês).</li></ol>
+<p>Cada meta mostra a <b>porcentagem de evolução</b>, quanto falta e <b>em cerca de quantos meses</b> você chega lá. No topo aparece a evolução geral de todas as metas. Quando guardar mais, toque em <b>+ Registrar aporte</b> e digite o valor.</p></div>
+
+<div class="card"><h3>📈 Análise</h3>
+<ul><li><b>Receitas e despesas:</b> gráfico dos 6 meses até o mês escolhido no Resumo. A renda e os fixos valem para todos os meses; o que muda são os gastos do Diário.</li>
+<li><b>Radar de saúde financeira:</b> compara 5 pontos (poupança, fixos, variáveis, contas em dia e reserva) com uma referência. Escolha <b>Mundial</b> (regra 50/30/20) ou <b>Brasil</b> (adaptação, com limites mais folgados para fixos). Quanto mais cheio o desenho, melhor. A nota vai de 0 a 100.</li>
+<li>As referências são educativas e não substituem orientação financeira individual.</li></ul></div>
 
 <div class="card"><h3>🏆 Desafio (Cofre 10 mil)</h3>
 <p>É a tabela do caderno com <b>200 depósitos</b> de R$ 5, 10, 20, 100 ou 200.</p>
@@ -280,12 +331,13 @@ nav button.on{background:rgba(232,213,196,.15);color:#e8d5c4}
   <button data-tab="gastos"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>Diário</button>
   <button data-tab="mensal"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7a2 2 0 012-2h11v3"/><rect x="3" y="7" width="18" height="13" rx="3"/><circle cx="16.5" cy="13.5" r="1.3"/></svg>Fixos</button>
   <button data-tab="metas"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg>Metas</button>
+  <button data-tab="analise"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l2.5-7 5 14 2.5-7H21"/></svg>Análise</button>
   <button data-tab="desafio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v5a4 4 0 01-8 0V4z"/><path d="M8 6H5v1a3 3 0 003 3M16 6h3v1a3 3 0 01-3 3"/><path d="M12 13v4M8.5 20h7M10 17h4"/></svg>Desafio</button>
 </nav>
 <script>
 var K="erca_v1",$=function(i){return document.getElementById(i)};
 var DEF=["Mercado","Transporte","Delivery e restaurantes","Lazer","Saúde","Estética e beleza","Roupas e calçados","Presentes","Assinaturas","Educação","Pet","Outros"];
-var S={renda:[],fixos:[],gastos:[],metas:[],cats:DEF.slice(),desafio:[]};
+var S={renda:[],fixos:[],gastos:[],metas:[],cats:DEF.slice(),desafio:[],ref:"mundo"};
 try{var raw=localStorage.getItem(K);if(raw){var p=JSON.parse(raw);for(var k in S)if(p[k])S[k]=p[k]}}catch(e){}
 function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
 function esc(t){var d=document.createElement("div");d.textContent=t;return d.innerHTML}
@@ -344,14 +396,16 @@ function draw(){
   $("lista").innerHTML=ord.length?ord.map(function(o){var g=o.g,dt=g.d.split("-").reverse().slice(0,2).join("/");return '<div class="row"><span>'+dt+' · '+esc(g.c)+(g.n?'<br><span class="mut">'+esc(g.n)+'</span>':'')+'</span><span>'+pgBtn("gastos",o.i,gasPago(g))+'<b>'+R(g.v)+'</b><button class="ed" aria-label="Editar" onclick="ed(\'gastos\','+o.i+')">✏️</button><button class="x" aria-label="Remover" onclick="rm(\'gastos\','+o.i+')">✕</button></span></div>'}).join(""):'<p class="mut">Nenhum gasto neste mês.</p>';
   drawD();
   listSimple("lRenda","renda");listSimple("lFixos","fixos");
-  $("lMetas").innerHTML=S.metas.length?S.metas.map(function(m,i){var falta=Math.max(m.a-m.g,0),pc=m.a?Math.min(m.g/m.a*100,100):0,meses=falta===0?"Meta concluída 🎉":(m.p>0?"Faltam "+R(falta)+", cerca de "+Math.ceil(falta/m.p)+" meses":"Faltam "+R(falta)+" · defina o aporte mensal");return '<div class="card"><div class="row" style="border:0;padding:0"><b>'+esc(m.n)+'</b><span><button class="ed" aria-label="Editar" onclick="ed(\'metas\','+i+')">✏️</button><button class="x" aria-label="Remover" onclick="rm(\'metas\','+i+')">✕</button></span></div><div class="mut">'+R(m.g)+' de '+R(m.a)+'</div><div class="bar g"><i style="width:'+pc.toFixed(0)+'%"></i></div><p class="mut" style="margin:8px 0 0">'+meses+'</p></div>'}).join(""):'<p class="mut">Crie sua primeira meta, como a reserva de emergência.</p>'}
+  drawMetas();
+  drawExtra();
+}
 document.querySelectorAll("nav button").forEach(function(b){b.onclick=function(){document.querySelectorAll("nav button,section").forEach(function(e){e.classList.remove("on")});b.classList.add("on");$(b.dataset.tab).classList.add("on");window.scrollTo(0,0)}});
 $("mes").onchange=draw;
 $("mPrev").onclick=function(){stepMes(-1)};$("mNext").onclick=function(){stepMes(1)};
 $("addG").onclick=function(){var v=parseFloat($("gv").value);if(!(v>0)||!$("gd").value||$("gc").value==="__nova"){$("gv").focus();return}S.gastos.push({d:$("gd").value,c:$("gc").value,n:$("gn").value.trim(),v:v,p:$("gp").checked});$("gp").checked=true;$("gv").value="";$("gn").value="";save();draw()};
 document.querySelectorAll("[data-add]").forEach(function(b){b.onclick=function(){var t=b.dataset.add,p=t==="renda"?"r":"f",n=$(p+"n").value.trim(),v=parseFloat($(p+"v").value);if(!n||!(v>0))return;var it={n:n,v:v};if(t==="fixos"){if($("fp").checked){it.pg={};it.pg[$("mes").value]=true}$("fp").checked=false}S[t].push(it);$(p+"n").value="";$(p+"v").value="";save();draw()}});
 $("dReset").onclick=function(){if(!S.desafio.length)return;if(!confirm("Zerar todos os depósitos marcados no desafio?"))return;S.desafio=[];save();drawD()};
-$("addM").onclick=function(){var n=$("mn").value.trim(),a=parseFloat($("ma").value);if(!n||!(a>0))return;S.metas.push({n:n,a:a,g:parseFloat($("mg").value)||0,p:parseFloat($("mp").value)||0});["mn","ma","mg","mp"].forEach(function(i){$(i).value=""});save();draw()};
+$("addM").onclick=function(){var n=$("mn").value.trim(),a=parseFloat($("ma").value);if(!n||!(a>0))return;S.metas.push({n:n,a:a,g:parseFloat($("mg").value)||0,p:parseFloat($("mp").value)||0});["mn","ma","mg","mp"].forEach(function(i){$(i).value=""});$("dNova").open=false;save();draw()};
 var EDT=null;
 function fld(id,lb,val,type,extra){return '<label for="'+id+'">'+lb+'</label><input id="'+id+'" type="'+type+'" value="'+esc(String(val==null?"":val)).replace(/"/g,"&quot;")+'" '+(extra||"")+'>'}
 function ed(arr,i){
@@ -403,7 +457,7 @@ $("rs").onclick=function(){var txt=$("bt").value.trim();if(!txt){alert("Cole o t
   try{var d=JSON.parse(txt);
     if(!d||!Array.isArray(d.gastos)||!Array.isArray(d.renda)||!Array.isArray(d.fixos)||!Array.isArray(d.metas))throw 0;
     if(!confirm("Isso substitui os dados atuais pelos do backup. Continuar?"))return;
-    S.renda=d.renda;S.fixos=d.fixos;S.gastos=d.gastos;S.metas=d.metas;S.cats=(Array.isArray(d.cats)&&d.cats.length)?d.cats:DEF.slice();S.desafio=Array.isArray(d.desafio)?d.desafio:[];
+    S.renda=d.renda;S.fixos=d.fixos;S.gastos=d.gastos;S.metas=d.metas;S.cats=(Array.isArray(d.cats)&&d.cats.length)?d.cats:DEF.slice();S.desafio=Array.isArray(d.desafio)?d.desafio:[];S.ref=d.ref==='brasil'?'brasil':'mundo';
     save();draw();$("bt").value="";alert("Backup restaurado!")}catch(e){alert("Texto de backup inválido.")}};
 $("gc").onchange=function(){if(this.value!=="__nova")return;
   var nm=(prompt("Nome da nova categoria (ex.: Lavagem de carro, Supermercado):")||"").trim().slice(0,30);
@@ -416,6 +470,224 @@ function closeGuia(){$("guia").classList.remove("on");window.scrollTo(0,0)}
 window.showGuiaOnce=function(){var v=null;try{v=localStorage.getItem("erca_guia_v1")}catch(e){}if(!v)openGuia()};
 $("bGuia").onclick=openGuia;$("gFecha").onclick=closeGuia;
 document.addEventListener("keydown",function(e){if(e.key==="Escape"&&$("guia").classList.contains("on"))closeGuia()});
+/* ===== Análise, metas com evolução e relatório em PDF ===== */
+var REF={
+ mundo:{nome:"Mundial",fix:50,vari:30,poup:20,res:6,nota:"Referência mundial: regra 50/30/20 (50% necessidades, 30% desejos, 20% poupança) e reserva de 6 meses de gastos (a literatura cita de 3 a 6 meses)."},
+ brasil:{nome:"Brasil",fix:60,vari:20,poup:20,res:6,nota:"Referência Brasil (adaptação): até 60% da renda em fixos, 20% em variáveis, 20% de poupança e reserva de 6 meses (fontes brasileiras citam de 6 a 12 meses). Não é um padrão oficial."}
+};
+function keyAdd(k,d){var p=k.split("-"),dt=new Date(+p[0],+p[1]-1+d,1);return dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")}
+function monthLbl(k,long){var p=k.split("-"),dt=new Date(+p[0],+p[1]-1,1);
+  var s=dt.toLocaleDateString("pt-BR",long?{month:"long",year:"numeric"}:{month:"short"}).replace(".","");
+  return long?s.charAt(0).toUpperCase()+s.slice(1):s}
+function calcM(k){
+  var tr=sum(S.renda),tf=sum(S.fixos),gs=S.gastos.filter(function(g){return g.d.slice(0,7)===k}),tv=sum(gs),pago=0,apag=0,by={};
+  S.fixos.forEach(function(x){if(x.pg&&x.pg[k])pago+=Number(x.v)||0;else apag+=Number(x.v)||0});
+  gs.forEach(function(g){var v=Number(g.v)||0;if(g.p!==false)pago+=v;else apag+=v;by[g.c]=(by[g.c]||0)+v});
+  return{key:k,tr:tr,tf:tf,tv:tv,sobra:tr-tf-tv,pago:pago,apag:apag,by:by,gs:gs}}
+function guardado(){var g=0;S.metas.forEach(function(m){g+=Number(m.g)||0});(S.desafio||[]).forEach(function(i){if(DV[i]!==undefined)g+=DV[i]});return g}
+function clamp(v){return Math.max(0,Math.min(100,v))}
+function pc0(x){return Math.round(x)+"%"}
+function lvl(n){return n>=80?"Excelente":n>=60?"Boa":n>=40?"Atenção":"Crítica"}
+function health(c){
+  var ref=REF[S.ref]||REF.mundo;if(!(c.tr>0))return null;
+  var dsp=c.tf+c.tv,rate=c.sobra/c.tr*100,fx=c.tf/c.tr*100,vr=c.tv/c.tr*100,gd=guardado(),meses=dsp>0?gd/dsp:(gd>0?99:0),tot=c.pago+c.apag,em=tot>0?c.pago/tot*100:null;
+  var sc=function(r,l){return r<=l?100:Math.max(0,100-(r-l)/l*100)};
+  var ax=[
+   {k:"Poupança",v:clamp(rate/ref.poup*100),t:"Você poupa "+pc0(rate)+" da renda. Meta: "+ref.poup+"%."},
+   {k:"Fixos",v:sc(fx,ref.fix),t:"Gastos fixos usam "+pc0(fx)+" da renda. Limite: "+ref.fix+"%."},
+   {k:"Variáveis",v:sc(vr,ref.vari),t:"Gastos variáveis usam "+pc0(vr)+" da renda. Limite: "+ref.vari+"%."},
+   {k:"Contas em dia",v:em===null?0:em,nd:em===null,t:em===null?"Sem contas neste mês.":pc0(em)+" das contas do mês estão pagas."},
+   {k:"Reserva",v:clamp(meses/ref.res*100),t:"Você tem "+Math.min(meses,99).toFixed(1).replace(".",",")+" meses de gastos guardados (metas e desafio). Meta: "+ref.res+" meses."}];
+  var u=ax.filter(function(a){return!a.nd}),n=Math.round(u.reduce(function(s,a){return s+a.v},0)/u.length);
+  return{ref:ref,ax:ax,nota:n,nivel:lvl(n)}}
+function radarSVG(h){
+  var cx=160,cy=150,R0=92,n=h.ax.length;
+  function pt(i,r){var a=-Math.PI/2+i*2*Math.PI/n;return[cx+r*Math.cos(a),cy+r*Math.sin(a),Math.cos(a)]}
+  function poly(r){return h.ax.map(function(_,i){var p=pt(i,r);return p[0].toFixed(1)+","+p[1].toFixed(1)}).join(" ")}
+  var s='<svg viewBox="0 0 320 300" class="radar" role="img" aria-label="Radar de saúde financeira, nota '+h.nota+' de 100">';
+  [25,50,75,100].forEach(function(l){s+='<polygon class="rg'+(l===100?' rm':'')+'" points="'+poly(R0*l/100)+'"/>'});
+  h.ax.forEach(function(_,i){var p=pt(i,R0);s+='<line class="rax" x1="'+cx+'" y1="'+cy+'" x2="'+p[0].toFixed(1)+'" y2="'+p[1].toFixed(1)+'"/>'});
+  s+='<polygon class="rpoly" points="'+h.ax.map(function(a,i){var p=pt(i,R0*a.v/100);return p[0].toFixed(1)+","+p[1].toFixed(1)}).join(" ")+'"/>';
+  h.ax.forEach(function(a,i){var p=pt(i,R0*a.v/100);s+='<circle class="rdot" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="3.5"/>';
+    var q=pt(i,R0+16),an=q[2]>0.3?"start":(q[2]<-0.3?"end":"middle");
+    s+='<text class="ctb" x="'+q[0].toFixed(1)+'" y="'+(q[1]+4).toFixed(1)+'" text-anchor="'+an+'">'+esc(a.k)+'</text>'});
+  return s+'</svg>'}
+function kfmt(v){return v>=1000?(v/1000).toFixed(1).replace(".",",").replace(",0","")+"k":String(Math.round(v))}
+function chartRows(){var key=$("mes").value,rows=[];for(var i=-5;i<=0;i++){var k=keyAdd(key,i),c=calcM(k);rows.push({k:k,l:monthLbl(k),r:c.tr,d:c.tf+c.tv})}return rows}
+function chartSVG(rows){
+  var W=340,H=190,base=150,top=26,gw=54,bw=18,mx=Math.max.apply(null,rows.map(function(r){return Math.max(r.r,r.d)}).concat([1])),s='<svg viewBox="0 0 '+W+' '+H+'" class="mchart" role="img" aria-label="Receitas e despesas dos últimos 6 meses">';
+  s+='<line class="rax" x1="6" y1="'+base+'" x2="'+(W-6)+'" y2="'+base+'"/>';
+  rows.forEach(function(r,i){var x=14+i*gw,hr=r.r/mx*(base-top),hd=r.d/mx*(base-top),last=i===rows.length-1;
+    s+='<rect class="br" x="'+x+'" y="'+(base-hr).toFixed(1)+'" width="'+bw+'" height="'+hr.toFixed(1)+'" rx="3"/>';
+    s+='<rect class="bd" x="'+(x+bw+4)+'" y="'+(base-hd).toFixed(1)+'" width="'+bw+'" height="'+hd.toFixed(1)+'" rx="3"/>';
+    if(r.r>0)s+='<text class="ct" x="'+(x+bw/2)+'" y="'+(base-hr-4).toFixed(1)+'" text-anchor="middle" font-size="9">'+kfmt(r.r)+'</text>';
+    if(r.d>0)s+='<text class="ct" x="'+(x+bw+4+bw/2)+'" y="'+(base-hd-4).toFixed(1)+'" text-anchor="middle" font-size="9">'+kfmt(r.d)+'</text>';
+    s+='<text class="'+(last?'ctb':'ct')+'" x="'+(x+bw+2)+'" y="'+(base+18)+'" text-anchor="middle">'+esc(r.l)+'</text>'});
+  return s+'</svg>'}
+function drawMetas(){
+  var T=0,G=0;S.metas.forEach(function(m){T+=Number(m.a)||0;G+=Math.min(Number(m.g)||0,Number(m.a)||0)});
+  var gp=T?G/T*100:0;
+  $("mGeral").style.display=S.metas.length?"block":"none";
+  $("mGeral").innerHTML=S.metas.length?'<div class="mut">Evolução geral das metas</div><div class="hs"><b class="pct" style="font-size:2.2rem">'+Math.round(gp)+'%</b><span class="mut">'+R(G)+' de '+R(T)+'</span></div><div class="bar g"><i style="width:'+gp.toFixed(0)+'%"></i></div>':"";
+  $("lMetas").innerHTML=S.metas.length?S.metas.map(function(m,i){
+    var falta=Math.max(m.a-m.g,0),pc=m.a?Math.min(m.g/m.a*100,100):0,
+    meses=falta===0?"Meta concluída 🎉":(m.p>0?"Faltam "+R(falta)+", cerca de "+Math.ceil(falta/m.p)+" meses.":"Faltam "+R(falta)+". Defina o aporte mensal.");
+    return '<div class="card"><div class="row" style="border:0;padding:0;align-items:flex-start"><div><b>'+esc(m.n)+'</b><div class="mut">'+R(m.g)+' de '+R(m.a)+'</div></div><div style="text-align:right"><div class="pct">'+Math.round(pc)+'%</div><button class="ed" aria-label="Editar" onclick="ed(\'metas\','+i+')">✏️</button><button class="x" aria-label="Remover" onclick="rm(\'metas\','+i+')">✕</button></div></div><div class="bar g" style="margin-top:6px"><i style="width:'+pc.toFixed(0)+'%"></i></div><p class="mut" style="margin:8px 0 0">'+meses+'</p><button class="btn sec" onclick="ap('+i+')">+ Registrar aporte</button></div>'}).join(""):'<p class="mut">Toque em "+ Nova meta" para criar a primeira, como a reserva de emergência.</p>'}
+function ap(i){var m=S.metas[i],t=prompt('Quanto você guardou agora para "'+m.n+'"? (R$)');if(t===null)return;
+  var v=parseFloat(String(t).replace(",","."));if(!(v>0)){alert("Digite um valor maior que zero.");return}
+  m.g=(Number(m.g)||0)+v;save();draw()}
+window.ap=ap;
+function drawExtra(){
+  var key=$("mes").value,c=calcM(key),ks=Object.keys(c.by).sort(function(a,b){return c.by[b]-c.by[a]}),fc=$("cats").firstElementChild;
+  if(fc&&ks.length)fc.classList.add("top");
+  $("hl").innerHTML=(ks.length&&c.tv>0)?'<div class="hl"><b>'+esc(ks[0])+'</b> foi onde você mais gastou: '+R(c.by[ks[0]])+', '+Math.round(c.by[ks[0]]/c.tv*100)+'% dos gastos variáveis.</div>':"";
+  var rows=chartRows(),any=rows.some(function(r){return r.r>0||r.d>0});
+  $("chart").innerHTML=any?chartSVG(rows):'<p class="mut">Cadastre renda e gastos para ver o gráfico.</p>';
+  $("chartTab").innerHTML='<div class="row mut"><span>Mês</span><span>Receitas / Despesas / Saldo</span></div>'+rows.map(function(r){return '<div class="row"><span>'+esc(monthLbl(r.k,true))+'</span><span>'+R(r.r)+' / '+R(r.d)+' / <b>'+R(r.r-r.d)+'</b></span></div>'}).join("");
+  document.querySelectorAll(".seg2 button").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.ref===(S.ref||"mundo")?"true":"false")});
+  var h=health(c);
+  if(!h){$("radar").innerHTML="";$("hScore").innerHTML='<p class="mut">Cadastre sua renda na aba Fixos para ver o radar.</p>';$("hList").innerHTML="";$("hNota").textContent="";return}
+  $("radar").innerHTML=radarSVG(h);
+  $("hScore").innerHTML='<div class="hs"><b>'+h.nota+'</b><span>de 100 · '+h.nivel+'</span></div>';
+  $("hList").innerHTML=h.ax.map(function(a){return '<div class="ax"><div class="row"><span>'+esc(a.k)+'</span><b>'+(a.nd?"sem dados":Math.round(a.v))+'</b></div><div class="bar g" style="margin-top:2px"><i style="width:'+(a.nd?0:a.v).toFixed(0)+'%"></i></div><div class="mut" style="font-size:.84rem;margin-top:3px">'+esc(a.t)+'</div></div>'}).join("");
+  $("hNota").textContent=h.ref.nota+" Valores educativos, não substituem orientação financeira."}
+document.querySelectorAll(".seg2 button").forEach(function(b){b.onclick=function(){S.ref=b.dataset.ref;save();drawExtra()}});
+
+/* ---------- PDF (gerado no próprio aparelho) ---------- */
+var WH=[278,278,355,556,556,889,667,191,333,333,389,584,278,333,278,278,556,556,556,556,556,556,556,556,556,556,278,278,584,584,584,556,1015,667,667,722,722,667,611,778,722,278,500,667,556,833,722,778,667,778,722,667,611,722,667,944,667,667,611,278,278,278,469,556,333,556,556,500,556,556,278,556,556,222,222,500,222,833,556,556,556,556,333,500,278,556,500,722,500,500,500,334,260,334,584,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,278,333,556,556,556,556,260,556,333,737,370,556,584,333,737,333,400,584,333,333,333,556,537,278,333,333,365,556,834,834,834,611,667,667,667,667,667,667,1000,722,667,667,667,667,278,278,278,278,722,722,778,778,778,778,778,584,778,722,722,722,722,667,667,611,556,556,556,556,556,556,889,500,556,556,556,556,278,278,278,278,556,556,556,556,556,556,556,584,611,556,556,556,556,500,556,500],WB=[278,333,474,556,556,889,722,238,333,333,389,584,278,333,278,278,556,556,556,556,556,556,556,556,556,556,333,333,584,584,584,611,975,722,722,722,722,667,611,778,722,278,556,722,611,833,722,778,667,778,722,667,611,722,667,944,667,667,611,333,278,333,584,556,333,556,611,556,611,556,333,611,611,278,278,556,278,889,611,611,611,611,389,556,333,611,556,778,556,556,500,389,280,389,584,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,278,333,556,556,556,556,280,556,333,737,370,556,584,333,737,333,400,584,333,333,333,611,556,278,333,333,365,556,834,834,834,611,722,722,722,722,722,722,1000,722,667,667,667,667,278,278,278,278,722,722,778,778,778,778,778,584,778,722,722,722,722,667,667,611,556,556,556,556,556,556,889,556,556,556,556,556,278,278,278,278,611,611,611,611,611,611,611,584,611,611,611,611,611,556,611,556],WT=[250,333,555,500,500,1000,833,278,333,333,500,570,250,333,250,278,500,500,500,500,500,500,500,500,500,500,333,333,570,570,570,500,930,722,667,722,722,667,611,778,778,389,500,778,667,944,722,778,611,778,722,556,667,722,722,1000,722,722,667,333,278,333,581,500,333,500,556,444,556,444,333,500,556,278,333,556,278,833,556,500,556,556,444,389,333,556,500,722,500,500,444,394,220,394,520,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,761,250,333,500,500,500,500,220,500,333,747,300,500,570,333,747,333,400,570,300,300,333,556,540,250,333,300,330,500,750,750,750,500,722,722,722,722,722,722,1000,722,667,667,667,667,389,389,389,389,722,722,778,778,778,778,778,570,778,722,722,722,722,722,611,556,500,500,500,500,500,500,722,444,444,444,444,444,278,278,278,278,500,556,500,500,500,500,500,570,500,556,556,556,556,500,556,500];
+
+function buildPDF(){
+  var PW=595,PH=842,ML=40,CW=515,BL=796;
+  function tw(s,f,sz){var W=f==="b"?WB:f==="t"?WT:WH,w=0;for(var i=0;i<s.length;i++){var c=s.charCodeAt(i);if(c<32||c>255)c=63;w+=W[c-32]||0}return w*sz/1000}
+  function clean(s){return String(s==null?"":s).replace(/[–—]/g,"-").replace(/[‘’]/g,"'").replace(/[“”]/g,'"').replace(/[•·]/g,"-").replace(/[\u{1F000}-\u{1FFFF}☀-➿️‍]/gu,"").replace(/\s+/g," ").trim()}
+  function hex(s){var h="";for(var i=0;i<s.length;i++){var c=s.charCodeAt(i);if(c<32||c>255)c=63;h+=(c<16?"0":"")+c.toString(16)}return "<"+h+">"}
+  function col(h){return[parseInt(h.slice(0,2),16)/255,parseInt(h.slice(2,4),16)/255,parseInt(h.slice(4,6),16)/255].map(function(x){return x.toFixed(3)}).join(" ")}
+  function n2(x){return x.toFixed(2)}
+  var pages=[],cur,y;
+  function newPage(){cur=[];pages.push(cur);y=40}
+  function need(h){if(y+h>BL)newPage()}
+  var FN={r:"/F1",b:"/F2",t:"/F3"};
+  function text(x,yy,s,sz,f,c){s=clean(s);if(!s)return;cur.push("BT "+FN[f||"r"]+" "+sz+" Tf "+col(c||"121212")+" rg "+n2(x)+" "+n2(PH-yy)+" Td "+hex(s)+" Tj ET")}
+  function textR(xr,yy,s,sz,f,c){s=clean(s);text(xr-tw(s,f||"r",sz),yy,s,sz,f,c)}
+  function rect(x,yy,w,h,c){if(w<=0||h<=0)return;cur.push(col(c)+" rg "+n2(x)+" "+n2(PH-yy-h)+" "+n2(w)+" "+n2(h)+" re f")}
+  function line(x1,y1,x2,y2,c,lw){cur.push(n2(lw||0.6)+" w "+col(c)+" RG "+n2(x1)+" "+n2(PH-y1)+" m "+n2(x2)+" "+n2(PH-y2)+" l S")}
+  function poly(pts,fill,stroke,lw){var d=pts.map(function(p,i){return n2(p[0])+" "+n2(PH-p[1])+(i?" l":" m")}).join(" ")+" h",op=fill&&stroke?"B":fill?"f":"S";
+    cur.push((fill?col(fill)+" rg ":"")+(stroke?col(stroke)+" RG "+n2(lw||1)+" w ":"")+d+" "+op)}
+  function fit(s,f,sz,mw){s=clean(s);if(tw(s,f,sz)<=mw)return s;while(s.length>1&&tw(s+"...",f,sz)>mw)s=s.slice(0,-1);return s+"..."}
+  function wrap(s,f,sz,mw){var out=[],ln="";clean(s).split(" ").forEach(function(w){var t=ln?ln+" "+w:w;if(tw(t,f,sz)>mw&&ln){out.push(ln);ln=w}else ln=t});if(ln)out.push(ln);return out}
+  function sec(t,mh){need(mh||48);y+=14;text(ML,y+12,t,15,"t","121212");line(ML,y+19,ML+CW,y+19,"c8a98b",1.2);y+=32}
+  function bar(x,yy,w,h,p,c){rect(x,yy,w,h,"e3d6c8");rect(x,yy,w*Math.max(0,Math.min(1,p)),h,c||"4fae7a")}
+  function dmy(d){return d.split("-").reverse().join("/")}
+  var key=$("mes").value,c=calcM(key),ml=monthLbl(key,true),now=new Date();
+  newPage();
+  rect(0,0,PW,86,"121212");rect(0,86,PW,3,"c8a98b");
+  text(ML,50,"ÉR$CA",28,"t","e8d5c4");text(ML,70,"Relatório financeiro",11,"r","cdb8a6");
+  textR(PW-ML,46,ml,15,"b","e8d5c4");textR(PW-ML,66,"Gerado em "+now.toLocaleDateString("pt-BR"),9,"r","cdb8a6");
+  y=104;
+  // Resumo
+  sec("Resumo do mês");
+  var bw=(CW-30)/4,kp=[["Renda",R(c.tr),"121212"],["Gastos fixos",R(c.tf),"121212"],["Gastos variáveis",R(c.tv),"121212"],["Sobra no mês",R(c.sobra),c.sobra>=0?"2e7d4f":"b3261e"]];
+  kp.forEach(function(k,i){var x=ML+i*(bw+10);rect(x,y,bw,52,"f4ebe2");text(x+10,y+18,k[0],9,"r","6b6058");text(x+10,y+38,k[1],12,"b",k[2])});
+  y+=62;
+  var den=Math.max(c.tr,c.tf+c.tv);
+  if(den>0){var x0=ML;rect(ML,y,CW,9,"e3d6c8");[[c.tf,"9a7656"],[c.tv,"e8d5c4"],[Math.max(c.tr-c.tf-c.tv,0),"4fae7a"]].forEach(function(s){var w=s[0]/den*CW;rect(x0,y,w,9,s[1]);x0+=w});y+=20;
+    [["Fixos","9a7656"],["Variáveis","e8d5c4"],["Sobra","4fae7a"]].forEach(function(l,i){rect(ML+i*80,y-5,8,8,l[1]);text(ML+i*80+13,y+2,l[0],8,"r","6b6058")});y+=14}
+  // Contas
+  sec("Contas do mês",90);
+  text(ML,y+4,"Pagas",9,"r","6b6058");text(ML+170,y+4,"A pagar",9,"r","6b6058");
+  text(ML,y+22,R(c.pago),13,"b","2e7d4f");text(ML+170,y+22,R(c.apag),13,"b","b3261e");
+  y+=34;bar(ML,y,CW,8,(c.pago+c.apag)?c.pago/(c.pago+c.apag):0);y+=18;
+  // Categorias
+  sec("Gastos variáveis por categoria",120);
+  var ks=Object.keys(c.by).sort(function(a,b){return c.by[b]-c.by[a]});
+  if(!ks.length||!(c.tv>0)){text(ML,y+4,"Nenhum gasto variável neste mês.",10,"r","6b6058");y+=18}
+  else{rect(ML,y,CW,34,"f4ebe2");rect(ML,y,4,34,"c8a98b");
+    text(ML+14,y+14,"Maior gasto do mês: "+ks[0],11,"b","121212");
+    text(ML+14,y+28,R(c.by[ks[0]])+" ("+Math.round(c.by[ks[0]]/c.tv*100)+"% dos gastos variáveis)",9,"r","6b6058");y+=46;
+    ks.slice(0,10).forEach(function(k,i){need(18);var p=c.by[k]/c.tv;text(ML,y+9,fit(k,i?"r":"b",10,170),10,i?"r":"b","121212");
+      bar(ML+185,y+1,170,8,p,i?"9a7656":"6f5238");textR(ML+CW-48,y+9,R(c.by[k]),10,i?"r":"b","121212");textR(ML+CW,y+9,Math.round(p*100)+"%",9,"r","6b6058");y+=17});
+    if(ks.length>10){text(ML,y+9,"e mais "+(ks.length-10)+" categorias",9,"r","6b6058");y+=14}}
+  // Grafico
+  sec("Receitas e despesas (últimos 6 meses)",235);
+  need(190);
+  var rows=chartRows(),mx=Math.max.apply(null,rows.map(function(r){return Math.max(r.r,r.d)}).concat([1])),base=y+150,top0=y+16,gw=CW/6;
+  rect(ML,y-2,8,8,"4fae7a");text(ML+13,y+5,"Receitas",8,"r","6b6058");rect(ML+70,y-2,8,8,"9a7656");text(ML+83,y+5,"Despesas",8,"r","6b6058");
+  rows.forEach(function(r,i){var x=ML+i*gw+(gw-2*26-4)/2,hr=r.r/mx*(base-top0-12),hd=r.d/mx*(base-top0-12);
+    rect(x,base-hr,26,hr,"4fae7a");rect(x+30,base-hd,26,hd,"9a7656");
+    if(r.r>0)text(x+13-tw(kfmt(r.r),"r",7)/2,base-hr-3,kfmt(r.r),7,"r","6b6058");
+    if(r.d>0)text(x+43-tw(kfmt(r.d),"r",7)/2,base-hd-3,kfmt(r.d),7,"r","6b6058");
+    var l=r.l;text(x+28-tw(l,i===5?"b":"r",9)/2,base+14,l,9,i===5?"b":"r",i===5?"121212":"6b6058")});
+  line(ML,base,ML+CW,base,"c8a98b",1);y+=176;
+  // Radar
+  var h=health(c);
+  sec("Radar de saúde financeira",300);
+  if(!h){text(ML,y+4,"Cadastre sua renda para ver o radar.",10,"r","6b6058");y+=18}
+  else{need(250);var cx=ML+130,cy=y+118,R0=82,n=h.ax.length;
+    var P=function(i,r){var a=-Math.PI/2+i*2*Math.PI/n;return[cx+r*Math.cos(a),cy+r*Math.sin(a),Math.cos(a)]};
+    [25,50,75,100].forEach(function(l){poly(h.ax.map(function(_,i){return P(i,R0*l/100)}),null,l===100?"c8a98b":"dccbbb",l===100?1:0.6)});
+    h.ax.forEach(function(_,i){var p=P(i,R0);line(cx,cy,p[0],p[1],"dccbbb",0.6)});
+    poly(h.ax.map(function(a,i){return P(i,R0*a.v/100)}),"e6d5c3","9a7656",1.6);
+    h.ax.forEach(function(a,i){var q=P(i,R0+10),w=tw(a.k,"b",8.5),x=q[2]>0.3?q[0]:(q[2]<-0.3?q[0]-w:q[0]-w/2);text(x,q[1]+3,a.k,8.5,"b","121212")});
+    var tx=ML+290;text(tx,y+24,h.nota+" de 100",20,"t",h.nota>=60?"2e7d4f":(h.nota>=40?"9a7656":"b3261e"));text(tx,y+42,h.nivel+" (referência: "+h.ref.nome+")",10,"b","121212");
+    var yy=y+62;h.ax.forEach(function(a){text(tx,yy,a.k+(a.nd?": sem dados":": "+Math.round(a.v)),9,"b","121212");yy+=11;wrap(a.t,"r",8,225).forEach(function(l){text(tx,yy,l,8,"r","6b6058");yy+=10});yy+=5});
+    y+=Math.max(236,yy-y+4);
+    wrap(h.ref.nota+" Valores educativos, não substituem orientação financeira.","r",8,CW).forEach(function(l){need(11);text(ML,y+8,l,8,"r","6b6058");y+=10});y+=4}
+  // Metas
+  sec("Metas e desafio",130);
+  if(!S.metas.length){text(ML,y+4,"Nenhuma meta cadastrada.",10,"r","6b6058");y+=18}
+  else{var T=0,G=0;S.metas.forEach(function(m){T+=Number(m.a)||0;G+=Math.min(Number(m.g)||0,Number(m.a)||0)});
+    text(ML,y+10,"Evolução geral: "+Math.round(T?G/T*100:0)+"%",11,"b","121212");textR(ML+CW,y+10,R(G)+" de "+R(T),9,"r","6b6058");y+=18;bar(ML,y,CW,8,T?G/T:0);y+=22;
+    S.metas.forEach(function(m){need(46);var f=Math.max(m.a-m.g,0),p=m.a?Math.min(m.g/m.a,1):0;
+      text(ML,y+10,fit(m.n,"b",10,300),10,"b","121212");textR(ML+CW,y+10,Math.round(p*100)+"%",11,"b","2e7d4f");
+      text(ML,y+23,R(m.g)+" de "+R(m.a)+(f===0?" - meta concluída":(m.p>0?" - faltam "+R(f)+", cerca de "+Math.ceil(f/m.p)+" meses":" - faltam "+R(f))),8.5,"r","6b6058");
+      bar(ML,y+29,CW,6,p);y+=46})}
+  var dn=(S.desafio||[]).filter(function(i){return DV[i]!==undefined}).length,dg=0,dt=0;DV.forEach(function(v,i){dt+=v;if((S.desafio||[]).indexOf(i)>=0)dg+=v});
+  need(36);text(ML,y+10,"Desafio Cofre 10 mil: "+dn+" de "+DV.length+" depósitos ("+Math.round(dt?dg/dt*100:0)+"%)",10,"b","121212");textR(ML+CW,y+10,R(dg)+" de "+R(dt),9,"r","6b6058");y+=16;bar(ML,y,CW,6,dt?dg/dt:0);y+=14;
+  // Renda e fixos
+  sec("Renda e gastos fixos",110);
+  function simple(t,arr,fx){need(30);text(ML,y+8,t,10,"b","121212");y+=16;
+    if(!arr.length){text(ML,y+8,"Nada cadastrado.",9,"r","6b6058");y+=16;return}
+    arr.forEach(function(x,i){need(16);if(i%2==0)rect(ML,y-2,CW,15,"f8f2eb");text(ML+6,y+9,fit(x.n,"r",9.5,330),9.5,"r","121212");
+      if(fx)text(ML+360,y+9,(x.pg&&x.pg[key])?"Paga":"Não paga",9,"b",(x.pg&&x.pg[key])?"2e7d4f":"b3261e");textR(ML+CW-6,y+9,R(x.v),9.5,"r","121212");y+=15});y+=8}
+  simple("Renda mensal",S.renda,false);simple("Gastos fixos (status em "+ml+")",S.fixos,true);
+  // Lancamentos
+  sec("Lançamentos de "+ml,100);
+  var gs=c.gs.slice().sort(function(a,b){return a.d.localeCompare(b.d)});
+  function th(){rect(ML,y,CW,16,"121212");text(ML+6,y+11,"Data",8.5,"b","e8d5c4");text(ML+62,y+11,"Categoria",8.5,"b","e8d5c4");text(ML+185,y+11,"Descrição",8.5,"b","e8d5c4");text(ML+390,y+11,"Status",8.5,"b","e8d5c4");textR(ML+CW-6,y+11,"Valor",8.5,"b","e8d5c4");y+=18}
+  if(!gs.length){text(ML,y+4,"Nenhum lançamento neste mês.",10,"r","6b6058");y+=18}
+  else{need(40);th();gs.forEach(function(g,i){if(y+16>BL){newPage();th()}
+    if(i%2==0)rect(ML,y-2,CW,15,"f8f2eb");var pd=g.p!==false;
+    text(ML+6,y+9,dmy(g.d).slice(0,5),9,"r","121212");text(ML+62,y+9,fit(g.c,"r",9,118),9,"r","121212");text(ML+185,y+9,fit(g.n||"",  "r",9,195),9,"r","6b6058");
+    text(ML+390,y+9,pd?"Paga":"Não paga",9,"b",pd?"2e7d4f":"b3261e");textR(ML+CW-6,y+9,R(g.v),9,"r","121212");y+=15});
+    need(22);y+=4;textR(ML+CW-6,y+10,"Total: "+R(c.tv),10,"b","121212");y+=14}
+  // Rodape + montagem
+  var N=pages.length;
+  pages.forEach(function(p,i){cur=p;line(ML,812,ML+CW,812,"dccbbb",0.6);text(ML,826,"ÉR$CA - Conteúdo educativo. Não substitui orientação financeira individual.",8,"r","6b6058");textR(ML+CW,826,"Página "+(i+1)+" de "+N,8,"r","6b6058")});
+  var objs=["","<< /Type /Catalog /Pages 2 0 R >>",""];
+  objs.push("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>");
+  objs.push("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>");
+  objs.push("<< /Type /Font /Subtype /Type1 /BaseFont /Times-Bold /Encoding /WinAnsiEncoding >>");
+  var kids=[];
+  pages.forEach(function(p){var pid=objs.length,cid=pid+1,st=p.join("\n");kids.push(pid+" 0 R");
+    objs.push("<< /Type /Page /Parent 2 0 R /MediaBox [0 0 "+PW+" "+PH+"] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents "+cid+" 0 R >>");
+    objs.push("<< /Length "+st.length+" >>\nstream\n"+st+"\nendstream")});
+  objs[2]="<< /Type /Pages /Kids ["+kids.join(" ")+"] /Count "+N+" >>";
+  var out="%PDF-1.4\n",offs=[];
+  for(var i=1;i<objs.length;i++){offs[i]=out.length;out+=i+" 0 obj\n"+objs[i]+"\nendobj\n"}
+  var xr=out.length;out+="xref\n0 "+objs.length+"\n0000000000 65535 f \n";
+  for(var j=1;j<objs.length;j++)out+=("0000000000"+offs[j]).slice(-10)+" 00000 n \n";
+  out+="trailer\n<< /Size "+objs.length+" /Root 1 0 R >>\nstartxref\n"+xr+"\n%%EOF";
+  return new Blob([out],{type:"application/pdf"})}
+function exportPDF(){
+  var blob,name="ERCA-relatorio-"+$("mes").value+".pdf";
+  try{blob=buildPDF()}catch(e){alert("Não foi possível gerar o PDF neste aparelho.");return}
+  function dl(){var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1500)}
+  var f=null;try{f=new File([blob],name,{type:"application/pdf"})}catch(e){}
+  if(f&&navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:"Relatório ÉR$CA"}).catch(function(e){if(e&&e.name!=="AbortError")dl()});return}
+  dl()}
+document.querySelectorAll(".pdfbtn").forEach(function(b){b.onclick=exportPDF});
+window.exportPDF=exportPDF;
+
 draw();
 </script>
 <script>
