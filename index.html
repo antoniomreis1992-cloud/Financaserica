@@ -69,7 +69,76 @@ body.locked #gate{display:flex}
 .pg.no{border-color:var(--bad);color:var(--bad)}
 .chk{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:.92rem;color:var(--ink)}
 .chk input{width:22px;height:22px;flex:none;padding:0}
+.dg{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;margin-top:12px}
+.dc{aspect-ratio:1;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:6px;font-size:.68rem;padding:0;line-height:1}
+.dc.on{background:var(--ok);border-color:var(--ok);color:var(--btnfg);text-decoration:line-through}
+header{position:relative}
+.hb{position:absolute;right:14px;top:20px;background:none;border:1px solid #c8a98b;color:#e8d5c4;border-radius:999px;padding:6px 12px;font-size:.8rem}
+#guia{display:none;position:fixed;inset:0;background:var(--bg);color:var(--ink);overflow:auto;z-index:60;-webkit-overflow-scrolling:touch}
+#guia.on{display:block}
+body.locked #guia{display:none!important}
+#guia .in{max-width:640px;margin:0 auto;padding:calc(18px + env(safe-area-inset-top,0px)) 16px calc(40px + env(safe-area-inset-bottom,0px))}
+#guia h1{font:800 1.6rem Georgia,"Times New Roman",serif;margin:0 0 4px}
+#guia h3{margin:0 0 6px;font:700 1.1rem Georgia,serif}
+#guia p,#guia li{margin:6px 0;font-size:.95rem}
+#guia ul,#guia ol{margin:6px 0;padding-left:20px}
+#guia .tag{display:inline-block;background:var(--nude);color:#121212;border-radius:999px;padding:1px 9px;font-size:.8rem;font-weight:600}
 details summary{cursor:pointer;color:var(--mut);font-size:.9rem}
+
+/* ===== v2: visual atualizado (mesma paleta) ===== */
+:root{--bronze:#c8a98b;--bronze-d:#9a7656;--field:#fbf7f2}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--field:#262322}}
+:root[data-theme="dark"]{--field:#262322}
+body{background:radial-gradient(80% 30% at 100% 0%,rgba(200,169,139,.22),transparent 70%),var(--bg);background-attachment:fixed;padding-bottom:calc(116px + env(safe-area-inset-bottom,0px));font-variant-numeric:tabular-nums}
+header{background:radial-gradient(110% 170% at 100% -35%,#3d3129 0%,#121212 58%);border-bottom:0;border-radius:0 0 26px 26px;padding:20px 20px 22px}
+header b{font-size:1.55rem;letter-spacing:.06em}
+header p{font-size:.86rem}
+main{padding:20px 16px}
+h2{font-size:1.4rem;margin:4px 0 14px}
+.card{border-radius:18px;margin-bottom:12px;border:1px solid var(--line)}
+.row{padding:11px 0}
+input,select,textarea{background:var(--field);border-radius:12px;padding:13px 14px;transition:border-color .15s,box-shadow .15s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--bronze-d);box-shadow:0 0 0 3px rgba(200,169,139,.38)}
+.btn{border-radius:14px;padding:14px 20px;transition:transform .12s ease,opacity .2s}
+.btn:active{transform:scale(.98)}
+.step{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px;margin:0 0 14px}
+.step button{width:44px;height:44px;border-radius:50%;border:0;background:var(--field);color:var(--ink);font-size:1.4rem;line-height:1;transition:transform .12s}
+.step button:active{transform:scale(.9)}
+.step span{font:700 1.05rem Georgia,"Times New Roman",serif}
+#mes{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.hero{background:linear-gradient(150deg,#27211d 0%,#121212 55%,#18130f 100%);color:#f1e6db;border:1px solid rgba(200,169,139,.34);border-radius:28px;padding:22px 20px 12px;margin-top:2px;box-shadow:0 18px 36px -14px rgba(18,18,18,.6)}
+.hero .mut{color:#cdb8a6}
+.hero .big{font-size:3rem;line-height:1.1;letter-spacing:-.02em;margin:2px 0 6px}
+.hero .big.pos{color:#8be0ac}.hero .big.neg{color:#ff9d94}
+.hero #status{margin:0 0 16px;font-weight:500;font-size:.9rem;color:#e8d5c4}
+.seg{display:flex;height:10px;border-radius:99px;overflow:hidden;background:rgba(232,213,196,.14);margin:0 0 12px}
+.seg i{display:block;height:100%;width:0;transition:width .7s cubic-bezier(.2,.8,.2,1)}
+.seg .s1{background:#9a7656}.seg .s2{background:#e8d5c4}.seg .s3{background:#4fae7a}
+.hero .row{border-bottom-color:rgba(232,213,196,.12)}
+.hero .row:last-child{border-bottom:0}
+.hero .row b{color:#f1e6db}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:9px}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0 12px}
+.duo span{display:block;font-size:.82rem}
+.duo b{font:700 1.45rem Georgia,"Times New Roman",serif}
+.bar{height:11px}
+.bar i{transform-origin:left;animation:grow .75s cubic-bezier(.2,.8,.2,1) both;transition:width .5s cubic-bezier(.2,.8,.2,1);background:linear-gradient(90deg,var(--bronze),var(--bronze-d))}
+.bar.g i{background:linear-gradient(90deg,#4fae7a,var(--ok))}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.dc{border-radius:9px;background:var(--field);font-weight:600;transition:background .15s,color .15s,transform .1s}
+.dc:active{transform:scale(.88)}
+.dc.pop{animation:pop .32s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pop{from{transform:scale(.7)}to{transform:scale(1)}}
+nav{left:50%;right:auto;transform:translateX(-50%);width:calc(100% - 20px);max-width:560px;bottom:calc(10px + env(safe-area-inset-bottom,0px));border-radius:26px;border:1px solid rgba(200,169,139,.38);background:rgba(18,18,18,.94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);padding:6px;gap:2px;box-shadow:0 14px 30px -10px rgba(0,0,0,.55)}
+nav button{border-radius:20px;padding:8px 2px 7px;font-size:.7rem;transition:background .2s,color .2s}
+nav button svg{display:block;margin:0 auto 3px;width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+nav button.on{background:rgba(232,213,196,.15);color:#e8d5c4}
+#gate{background:radial-gradient(90% 55% at 50% 0%,#3d3129 0%,#121212 65%)}
+#gate b{font-size:2.8rem}
+
+.qm{display:inline-grid;place-items:center;width:18px;height:18px;border:1px solid currentColor;border-radius:50%;font-size:.7rem;margin-right:7px;vertical-align:1px}
+.chk input{accent-color:var(--btn)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body class="locked">
@@ -80,18 +149,20 @@ details summary{cursor:pointer;color:var(--mut);font-size:.9rem}
 <button id="gbtn">Entrar</button><div class="msg" id="gmsg" role="alert"></div>
 <small>Ainda não tem o código? Fale com @ericamarques.financas</small>
 </div></div>
-<header><b>ÉR$CA</b><p>Ainda dá tempo de organizar a sua vida.</p></header>
+<header><button class="hb" id="bGuia" aria-label="Abrir o guia: como usar o aplicativo"><span class="qm">?</span>Como usar</button><b>ÉR$CA</b><p>Ainda dá tempo de organizar a sua vida.</p></header>
 <main>
 <section id="resumo" class="on">
   <h2>Resumo do mês</h2>
-  <label for="mes">Mês</label><input type="month" id="mes">
-  <div class="card" style="margin-top:14px"><div class="mut">Sobra (ou falta) no mês</div><div class="big" id="sobra">R$ 0,00</div><div id="status" style="font-weight:600;margin:4px 0 8px"></div>
-    <div class="row"><span>💰 Renda</span><b id="tRenda"></b></div>
-    <div class="row"><span>🏠 Gastos fixos</span><b id="tFixos"></b></div>
-    <div class="row"><span>🛍️ Gastos variáveis</span><b id="tVar"></b></div></div>
-  <div class="card"><b>Contas do mês: pagas e a pagar</b>
-    <div class="row"><span>✅ Pagas</span><b id="tPago" class="pos"></b></div>
-    <div class="row"><span>⏳ A pagar</span><b id="tAPagar" class="neg"></b></div>
+  <div class="step"><button id="mPrev" aria-label="Mês anterior">‹</button><span id="mLbl" aria-live="polite"></span><button id="mNext" aria-label="Próximo mês">›</button></div>
+  <input type="month" id="mes" aria-hidden="true" tabindex="-1">
+  <div class="card hero"><div class="mut">Sobra (ou falta) no mês</div><div class="big" id="sobra">R$ 0,00</div><div id="status"></div>
+    <div class="seg" id="seg" aria-hidden="true"><i class="s1" id="sg1"></i><i class="s2" id="sg2"></i><i class="s3" id="sg3"></i></div>
+    <div class="row"><span>Renda</span><b id="tRenda"></b></div>
+    <div class="row"><span><i class="dot" style="background:#9a7656"></i>Gastos fixos</span><b id="tFixos"></b></div>
+    <div class="row"><span><i class="dot" style="background:#e8d5c4"></i>Gastos variáveis</span><b id="tVar"></b></div></div>
+  <div class="card"><b>Contas do mês</b>
+    <div class="duo"><div><span class="mut">Pagas</span><b id="tPago" class="pos"></b></div><div><span class="mut">A pagar</span><b id="tAPagar" class="neg"></b></div></div>
+    <div class="bar g" aria-hidden="true"><i id="pBar" style="width:0%"></i></div>
     <div id="lAPagar"></div></div>
   <div class="card"><b>Variáveis por categoria</b><div id="cats"></div></div>
   <div class="card"><b>Backup dos dados</b><p class="mut" style="margin:6px 0 0">Seus dados ficam só neste aparelho. Toque em "Gerar backup", copie o texto e guarde no app Notas ou mande para você mesma no WhatsApp. Para restaurar, cole o texto na caixa e toque em "Restaurar".</p>
@@ -138,22 +209,83 @@ details summary{cursor:pointer;color:var(--mut);font-size:.9rem}
     <button class="btn" id="addM">Adicionar meta</button></div>
   <div id="lMetas"></div>
 </section>
+<section id="desafio">
+  <h2>Cofre Desafio 10 mil</h2>
+  <div class="card">
+    <div class="mut">Guardado no desafio</div><div class="big pos" id="dGot">R$ 0,00</div>
+    <div class="mut" id="dInfo"></div>
+    <div class="bar g"><i id="dBar" style="width:0%"></i></div>
+    <p class="mut" style="margin:10px 0 0">Complete os 200 depósitos. Toque no valor que você depositou para marcar (toque de novo para desmarcar).</p>
+    <div class="dg" id="dGrid"></div>
+    <button class="btn sec" id="dReset">Zerar desafio</button>
+  </div>
+</section>
 <p class="foot">@ericamarques.financas · ÉR$CA<br>Conteúdo educativo. Não substitui orientação financeira individual.</p>
 </main>
+<div id="guia" role="dialog" aria-modal="true" aria-labelledby="gt"><div class="in">
+<h1 id="gt">Como usar o ÉR$CA</h1>
+<p class="mut">Um guia rápido de tudo o que o aplicativo faz. Você pode abrir de novo a qualquer hora pelo botão <b>Como usar</b>, no topo.</p>
+
+<div class="card"><h3>👋 Por onde começar</h3>
+<ol><li>Em <b>Fixos</b>, cadastre sua <b>renda</b> e suas <b>contas fixas</b> (aluguel, internet, etc.).</li>
+<li>No <b>Diário</b>, anote os gastos do dia a dia.</li>
+<li>No <b>Resumo</b>, veja quanto sobra no mês.</li>
+<li>Em <b>Metas</b> e <b>Desafio</b>, acompanhe o que você quer guardar.</li></ol>
+<p class="mut">Seus dados ficam guardados <b>só neste celular</b>. Ninguém mais vê o que você cadastra.</p></div>
+
+<div class="card"><h3>📊 Resumo</h3>
+<p>É a tela principal. Escolha o <b>mês</b> no topo e tudo se ajusta a ele.</p>
+<ul><li><b>Sobra (ou falta) no mês:</b> renda menos gastos fixos menos gastos variáveis. Verde = está sobrando. Vermelho = o mês fechou negativo. A conta <b>desconta todas as contas</b>, estejam pagas ou não.</li>
+<li><b>Contas do mês:</b> mostra quanto já foi <b>pago</b>, quanto está <b>a pagar</b> e a lista do que ainda falta pagar.</li>
+<li><b>Variáveis por categoria:</b> barras que mostram onde você mais gasta.</li>
+<li><b>Backup dos dados:</b> toque em <b>Gerar backup</b> para copiar um texto com todos os seus dados. Cole no app <b>Notas</b> ou mande para você mesma no WhatsApp. Para recuperar, cole o texto na caixa e toque em <b>Restaurar backup</b>.</li></ul></div>
+
+<div class="card"><h3>✍️ Diário</h3>
+<p>Aqui você anota cada gasto.</p>
+<ol><li>Escolha a <b>data</b> e o <b>valor</b>.</li><li>Escolha a <b>categoria</b> e, se quiser, escreva uma descrição.</li>
+<li>Marque <b>"Já paguei este gasto"</b> se ele já foi pago. Se ainda não, desmarque.</li><li>Toque em <b>Adicionar gasto</b>.</li></ol>
+<p>Em cada lançamento: o botão <span class="tag">Paga</span> / <span class="tag">Não paga</span> troca o status com um toque, o <b>✏️</b> edita e o <b>✕</b> exclui.</p>
+<p><b>Categorias:</b> abra <b>Gerenciar categorias</b> para criar, renomear ou excluir (ao excluir, os gastos vão para "Outros"). O atalho mais rápido é a última opção da lista de categorias, <b>➕ Nova categoria…</b>. Use para tipos de gasto como <i>Lavagem de carro</i> ou <i>Supermercado</i>.</p></div>
+
+<div class="card"><h3>💼 Fixos</h3>
+<p>Tem duas partes:</p>
+<ul><li><b>Renda mensal:</b> salário e outras entradas. Cadastre o nome e o valor.</li>
+<li><b>Gastos fixos:</b> contas que se repetem todo mês (aluguel, internet, luz).</li></ul>
+<p>Cada gasto fixo tem o botão <span class="tag">Paga</span> / <span class="tag">Não paga</span>, que vale <b>só para o mês escolhido</b> no Resumo. No mês seguinte, as contas voltam como "Não paga". Ao cadastrar, a caixa <b>"Já está paga neste mês"</b> já marca como paga. Use <b>✏️</b> para editar e <b>✕</b> para excluir.</p></div>
+
+<div class="card"><h3>🎯 Metas</h3>
+<p>Para guardar dinheiro com um objetivo (reserva de emergência, viagem, etc.).</p>
+<ol><li>Dê um nome à meta e informe o <b>valor alvo</b>.</li><li>Informe <b>quanto já guardou</b> e o <b>aporte mensal</b> (quanto pretende guardar por mês).</li></ol>
+<p>O app mostra quanto falta, uma barra de progresso e <b>em cerca de quantos meses</b> você chega lá. Quando guardar mais, toque no <b>✏️</b> e atualize o valor "já guardado".</p></div>
+
+<div class="card"><h3>🏆 Desafio (Cofre 10 mil)</h3>
+<p>É a tabela do caderno com <b>200 depósitos</b> de R$ 5, 10, 20, 100 ou 200.</p>
+<ol><li>Cada vez que depositar um valor, <b>toque nele</b> na tabela. Ele fica verde e riscado.</li>
+<li>Marcou errado? <b>Toque de novo</b> para desmarcar.</li></ol>
+<p>No topo você vê o total guardado, quantos depósitos já fez, quanto falta e a barra de progresso. O botão <b>Zerar desafio</b> recomeça do zero. Pode depositar em qualquer ordem.</p></div>
+
+<div class="card"><h3>💡 Dicas</h3>
+<ul><li><b>Instale na tela inicial:</b> no <b>iPhone</b> (Safari), toque em Compartilhar e depois em <b>Adicionar à Tela de Início</b>. No <b>Android</b> (Chrome), toque em ⋮ e depois em <b>Instalar app</b>. Depois use sempre pelo ícone.</li>
+<li><b>Faça backup toda semana.</b> Se você limpar os dados do navegador ou trocar de celular, é o backup que traz tudo de volta.</li>
+<li>Para editar qualquer item, use o <b>✏️</b>. Para apagar, use o <b>✕</b>.</li></ul></div>
+
+<button class="btn" id="gFecha">Entendi, vamos começar</button>
+</div></div>
 <div class="modal" id="md" role="dialog" aria-modal="true" aria-labelledby="mdt"><div>
   <h2 id="mdt">Editar</h2><div id="mdf"></div>
   <button class="btn" id="mdok">Salvar alterações</button>
   <button class="btn sec" id="mdno">Cancelar</button></div></div>
 <nav>
-  <button class="on" data-tab="resumo"><span>📊</span>Resumo</button>
-  <button data-tab="gastos"><span>✍️</span>Diário</button>
-  <button data-tab="mensal"><span>💼</span>Fixos</button>
-  <button data-tab="metas"><span>🎯</span>Metas</button>
+  <button class="on" data-tab="resumo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V11M12 20V4M19 20v-6"/></svg>Resumo</button>
+  <button data-tab="gastos"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>Diário</button>
+  <button data-tab="mensal"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7a2 2 0 012-2h11v3"/><rect x="3" y="7" width="18" height="13" rx="3"/><circle cx="16.5" cy="13.5" r="1.3"/></svg>Fixos</button>
+  <button data-tab="metas"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg>Metas</button>
+  <button data-tab="desafio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v5a4 4 0 01-8 0V4z"/><path d="M8 6H5v1a3 3 0 003 3M16 6h3v1a3 3 0 01-3 3"/><path d="M12 13v4M8.5 20h7M10 17h4"/></svg>Desafio</button>
 </nav>
 <script>
 var K="erca_v1",$=function(i){return document.getElementById(i)};
 var DEF=["Mercado","Transporte","Delivery e restaurantes","Lazer","Saúde","Estética e beleza","Roupas e calçados","Presentes","Assinaturas","Educação","Pet","Outros"];
-var S={renda:[],fixos:[],gastos:[],metas:[],cats:DEF.slice()};
+var S={renda:[],fixos:[],gastos:[],metas:[],cats:DEF.slice(),desafio:[]};
 try{var raw=localStorage.getItem(K);if(raw){var p=JSON.parse(raw);for(var k in S)if(p[k])S[k]=p[k]}}catch(e){}
 function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
 function esc(t){var d=document.createElement("div");d.textContent=t;return d.innerHTML}
@@ -172,16 +304,35 @@ function tgl(arr,i){var x=S[arr][i];
   save();draw()}
 window.tgl=tgl;
 function pgBtn(arr,i,ok){return '<button class="pg '+(ok?'ok':'no')+'" aria-label="'+(ok?'Marcar como não paga':'Marcar como paga')+'" onclick="tgl(\''+arr+'\','+i+')">'+(ok?'✔ Paga':'Não paga')+'</button>'}
+var DV=[100,5,20,5,100,200,10,20,5,100,20,5,10,100,20,20,5,100,10,20,5,200,20,5,10,100,20,5,200,100,10,100,10,200,5,5,20,100,20,10,200,5,100,20,5,10,100,10,200,5,100,5,20,5,100,20,10,20,5,100,20,5,10,100,20,200,5,100,10,20,5,20,20,5,10,100,20,5,200,100,10,100,10,200,100,5,20,100,20,10,200,5,100,20,5,10,100,10,200,5,100,5,20,5,100,20,10,20,5,100,20,5,10,100,20,200,5,100,10,20,5,20,20,5,10,100,20,5,200,100,10,100,10,200,100,5,20,100,20,10,200,5,100,20,5,10,100,10,200,5,100,5,20,5,100,20,10,20,5,100,20,5,10,100,20,200,5,100,10,20,5,20,20,5,10,100,20,5,200,100,10,100,10,200,100,5,20,100,20,10,200,5,100,20,5,10,100,10,200,5];
+var _sv=0,_tok=0,_raf=0;
+function animNum(el,to){var id=++_tok,from=_sv;_sv=to;cancelAnimationFrame(_raf);
+  if(from===to||(window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches)){el.textContent=R(to);return}
+  var t0=performance.now(),d=480;
+  (function f(t){if(id!==_tok)return;var k=Math.min((t-t0)/d,1),e=1-Math.pow(1-k,3);el.textContent=R(from+(to-from)*e);if(k<1)_raf=requestAnimationFrame(f)})(t0);
+  setTimeout(function(){if(id===_tok)el.textContent=R(to)},d+80)}
+function stepMes(d){var v=$("mes").value.split("-"),dt=new Date(+v[0],+v[1]-1+d,1);$("mes").value=dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0");draw()}
+function drawD(){var a=S.desafio||[],set={},got=0,tot=0;a.forEach(function(i){if(DV[i]!==undefined)set[i]=1});
+  DV.forEach(function(v,i){tot+=v;if(set[i])got+=v});var n=Object.keys(set).length;
+  $("dGot").textContent=R(got);$("dInfo").textContent=n+" de "+DV.length+" depósitos. Faltam "+R(tot-got)+" de "+R(tot)+".";
+  $("dBar").style.width=(tot?got/tot*100:0).toFixed(0)+"%";
+  $("dGrid").innerHTML=DV.map(function(v,i){return '<button class="dc'+(set[i]?' on':'')+'" aria-pressed="'+(set[i]?'true':'false')+'" aria-label="Depósito de '+v+' reais, número '+(i+1)+'" onclick="td('+i+')">'+v+'</button>'}).join("")}
+function td(i){var a=S.desafio,j=a.indexOf(i);if(j<0)a.push(i);else a.splice(j,1);save();drawD();var c=$("dGrid").children[i];if(c&&j<0)c.classList.add("pop")}
+window.td=td;
 function listSimple(id,arr){
   $(id).innerHTML=S[arr].length?S[arr].map(function(x,i){return '<div class="row"><span>'+esc(x.n)+'</span><span>'+(arr==="fixos"?pgBtn("fixos",i,fixPago(x)):"")+'<b>'+R(x.v)+'</b><button class="ed" aria-label="Editar" onclick="ed(\''+arr+'\','+i+')">✏️</button><button class="x" aria-label="Remover" onclick="rm(\''+arr+'\','+i+')">✕</button></span></div>'}).join(""):'<p class="mut">Nada por aqui ainda.</p>'}
 function draw(){
   var tr=sum(S.renda),tf=sum(S.fixos),mg=mesG(),tv=sum(mg),s=tr-tf-tv;
   $("tRenda").textContent=R(tr);$("tFixos").textContent=R(tf);$("tVar").textContent=R(tv);
-  $("sobra").textContent=R(s);$("sobra").className="big "+(s>=0?"pos":"neg");$("status").textContent=tr===0?"👋 Comece cadastrando sua renda em Fixos":(s>=0?"✅ Mês positivo: o dinheiro está sobrando":"⚠️ Atenção: o mês fechou negativo");
+  animNum($("sobra"),s);$("sobra").className="big "+(s>=0?"pos":"neg");$("status").textContent=tr===0?"👋 Comece cadastrando sua renda em Fixos":(s>=0?"✅ Mês positivo: o dinheiro está sobrando":"⚠️ Atenção: o mês fechou negativo");
   var mm=$("mes").value,pago=0,apag=0,pend=[];
   S.fixos.forEach(function(x){if(fixPago(x))pago+=Number(x.v||0);else{apag+=Number(x.v||0);pend.push({n:x.n,v:x.v,t:"Fixa"})}});
   mg.forEach(function(g){if(gasPago(g))pago+=Number(g.v||0);else{apag+=Number(g.v||0);pend.push({n:(g.n||g.c),v:g.v,t:"Diário"})}});
   $("tPago").textContent=R(pago);$("tAPagar").textContent=R(apag);
+  $("pBar").style.width=((pago+apag)?pago/(pago+apag)*100:0).toFixed(0)+"%";
+  var mp=mm.split("-"),ml=new Date(+mp[0],+mp[1]-1,1).toLocaleDateString("pt-BR",{month:"long",year:"numeric"});$("mLbl").textContent=ml.charAt(0).toUpperCase()+ml.slice(1);
+  var gt=tf+tv,sb=Math.max(tr-gt,0),den=Math.max(tr,gt);
+  $("sg1").style.width=(den?tf/den*100:0).toFixed(1)+"%";$("sg2").style.width=(den?tv/den*100:0).toFixed(1)+"%";$("sg3").style.width=(den?sb/den*100:0).toFixed(1)+"%";
   $("lAPagar").innerHTML=pend.length?'<p class="mut" style="margin:10px 0 2px">Ainda falta pagar:</p>'+pend.map(function(p){return '<div class="row"><span>'+esc(p.n)+' <span class="mut">· '+p.t+'</span></span><b>'+R(p.v)+'</b></div>'}).join(""):((S.fixos.length||mg.length)?'<p class="mut" style="margin:10px 0 0">🎉 Tudo pago neste mês.</p>':'<p class="mut" style="margin:10px 0 0">Cadastre contas em Fixos ou no Diário.</p>');
   $("fmes").textContent="Status de pagamento de "+mm.slice(5)+"/"+mm.slice(0,4)+" (para mudar o mês, use a aba Resumo).";
   var by={};mg.forEach(function(g){by[g.c]=(by[g.c]||0)+Number(g.v)});
@@ -191,12 +342,15 @@ function draw(){
   $("lCats").innerHTML=S.cats.map(function(c,i){return '<div class="row"><span>'+esc(c)+'</span><span><button class="ed" aria-label="Editar categoria" onclick="ed(\'cats\','+i+')">✏️</button><button class="x" aria-label="Excluir categoria" onclick="dc('+i+')">✕</button></span></div>'}).join("");
   var ord=S.gastos.map(function(g,i){return{g:g,i:i}}).filter(function(o){return o.g.d.slice(0,7)===$("mes").value}).sort(function(a,b){return b.g.d.localeCompare(a.g.d)});
   $("lista").innerHTML=ord.length?ord.map(function(o){var g=o.g,dt=g.d.split("-").reverse().slice(0,2).join("/");return '<div class="row"><span>'+dt+' · '+esc(g.c)+(g.n?'<br><span class="mut">'+esc(g.n)+'</span>':'')+'</span><span>'+pgBtn("gastos",o.i,gasPago(g))+'<b>'+R(g.v)+'</b><button class="ed" aria-label="Editar" onclick="ed(\'gastos\','+o.i+')">✏️</button><button class="x" aria-label="Remover" onclick="rm(\'gastos\','+o.i+')">✕</button></span></div>'}).join(""):'<p class="mut">Nenhum gasto neste mês.</p>';
+  drawD();
   listSimple("lRenda","renda");listSimple("lFixos","fixos");
-  $("lMetas").innerHTML=S.metas.length?S.metas.map(function(m,i){var falta=Math.max(m.a-m.g,0),pc=m.a?Math.min(m.g/m.a*100,100):0,meses=falta===0?"Meta concluída 🎉":(m.p>0?"Faltam "+R(falta)+" · cerca de "+Math.ceil(falta/m.p)+" meses":"Faltam "+R(falta)+" · defina o aporte mensal");return '<div class="card"><div class="row" style="border:0;padding:0"><b>'+esc(m.n)+'</b><span><button class="ed" aria-label="Editar" onclick="ed(\'metas\','+i+')">✏️</button><button class="x" aria-label="Remover" onclick="rm(\'metas\','+i+')">✕</button></span></div><div class="mut">'+R(m.g)+' de '+R(m.a)+'</div><div class="bar g"><i style="width:'+pc.toFixed(0)+'%"></i></div><p class="mut" style="margin:8px 0 0">'+meses+'</p></div>'}).join(""):'<p class="mut">Crie sua primeira meta, como a reserva de emergência.</p>'}
+  $("lMetas").innerHTML=S.metas.length?S.metas.map(function(m,i){var falta=Math.max(m.a-m.g,0),pc=m.a?Math.min(m.g/m.a*100,100):0,meses=falta===0?"Meta concluída 🎉":(m.p>0?"Faltam "+R(falta)+", cerca de "+Math.ceil(falta/m.p)+" meses":"Faltam "+R(falta)+" · defina o aporte mensal");return '<div class="card"><div class="row" style="border:0;padding:0"><b>'+esc(m.n)+'</b><span><button class="ed" aria-label="Editar" onclick="ed(\'metas\','+i+')">✏️</button><button class="x" aria-label="Remover" onclick="rm(\'metas\','+i+')">✕</button></span></div><div class="mut">'+R(m.g)+' de '+R(m.a)+'</div><div class="bar g"><i style="width:'+pc.toFixed(0)+'%"></i></div><p class="mut" style="margin:8px 0 0">'+meses+'</p></div>'}).join(""):'<p class="mut">Crie sua primeira meta, como a reserva de emergência.</p>'}
 document.querySelectorAll("nav button").forEach(function(b){b.onclick=function(){document.querySelectorAll("nav button,section").forEach(function(e){e.classList.remove("on")});b.classList.add("on");$(b.dataset.tab).classList.add("on");window.scrollTo(0,0)}});
 $("mes").onchange=draw;
+$("mPrev").onclick=function(){stepMes(-1)};$("mNext").onclick=function(){stepMes(1)};
 $("addG").onclick=function(){var v=parseFloat($("gv").value);if(!(v>0)||!$("gd").value||$("gc").value==="__nova"){$("gv").focus();return}S.gastos.push({d:$("gd").value,c:$("gc").value,n:$("gn").value.trim(),v:v,p:$("gp").checked});$("gp").checked=true;$("gv").value="";$("gn").value="";save();draw()};
 document.querySelectorAll("[data-add]").forEach(function(b){b.onclick=function(){var t=b.dataset.add,p=t==="renda"?"r":"f",n=$(p+"n").value.trim(),v=parseFloat($(p+"v").value);if(!n||!(v>0))return;var it={n:n,v:v};if(t==="fixos"){if($("fp").checked){it.pg={};it.pg[$("mes").value]=true}$("fp").checked=false}S[t].push(it);$(p+"n").value="";$(p+"v").value="";save();draw()}});
+$("dReset").onclick=function(){if(!S.desafio.length)return;if(!confirm("Zerar todos os depósitos marcados no desafio?"))return;S.desafio=[];save();drawD()};
 $("addM").onclick=function(){var n=$("mn").value.trim(),a=parseFloat($("ma").value);if(!n||!(a>0))return;S.metas.push({n:n,a:a,g:parseFloat($("mg").value)||0,p:parseFloat($("mp").value)||0});["mn","ma","mg","mp"].forEach(function(i){$(i).value=""});save();draw()};
 var EDT=null;
 function fld(id,lb,val,type,extra){return '<label for="'+id+'">'+lb+'</label><input id="'+id+'" type="'+type+'" value="'+esc(String(val==null?"":val)).replace(/"/g,"&quot;")+'" '+(extra||"")+'>'}
@@ -249,7 +403,7 @@ $("rs").onclick=function(){var txt=$("bt").value.trim();if(!txt){alert("Cole o t
   try{var d=JSON.parse(txt);
     if(!d||!Array.isArray(d.gastos)||!Array.isArray(d.renda)||!Array.isArray(d.fixos)||!Array.isArray(d.metas))throw 0;
     if(!confirm("Isso substitui os dados atuais pelos do backup. Continuar?"))return;
-    S.renda=d.renda;S.fixos=d.fixos;S.gastos=d.gastos;S.metas=d.metas;S.cats=(Array.isArray(d.cats)&&d.cats.length)?d.cats:DEF.slice();
+    S.renda=d.renda;S.fixos=d.fixos;S.gastos=d.gastos;S.metas=d.metas;S.cats=(Array.isArray(d.cats)&&d.cats.length)?d.cats:DEF.slice();S.desafio=Array.isArray(d.desafio)?d.desafio:[];
     save();draw();$("bt").value="";alert("Backup restaurado!")}catch(e){alert("Texto de backup inválido.")}};
 $("gc").onchange=function(){if(this.value!=="__nova")return;
   var nm=(prompt("Nome da nova categoria (ex.: Lavagem de carro, Supermercado):")||"").trim().slice(0,30);
@@ -257,6 +411,11 @@ $("gc").onchange=function(){if(this.value!=="__nova")return;
   var ex=S.cats.filter(function(c){return c.toLowerCase()===nm.toLowerCase()})[0];
   if(!ex){S.cats.push(nm);save();ex=nm}
   draw();$("gc").value=ex};
+function openGuia(){try{localStorage.setItem("erca_guia_v1","1")}catch(e){}$("guia").classList.add("on");$("guia").scrollTop=0}
+function closeGuia(){$("guia").classList.remove("on");window.scrollTo(0,0)}
+window.showGuiaOnce=function(){var v=null;try{v=localStorage.getItem("erca_guia_v1")}catch(e){}if(!v)openGuia()};
+$("bGuia").onclick=openGuia;$("gFecha").onclick=closeGuia;
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&$("guia").classList.contains("on"))closeGuia()});
 draw();
 </script>
 <script>
@@ -265,7 +424,7 @@ if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0){window.a
 <script>
 (function(){
 var KA="erca_acesso",fails=0,LIST=null,$g=function(i){return document.getElementById(i)};
-function unlock(){document.body.classList.remove("locked")}
+function unlock(){document.body.classList.remove("locked");if(window.showGuiaOnce)window.showGuiaOnce()}
 function lock(m){document.body.classList.add("locked");$g("gmsg").textContent=m||""}
 async function sha(t){var b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,"0")}).join("")}
 function norm(s){s=String(s).toUpperCase().replace(/[^A-Z0-9]/g,"");if(s.length===12&&s.indexOf("ERCA")===0)s=s.slice(4);return s}
