@@ -232,12 +232,12 @@ main>section>h2,.foot{color:#0b0b0b}
   <h2>Renda e gastos fixos</h2>
   <div class="card"><b>Renda mensal</b><div id="lRenda"></div>
     <div class="two"><input id="rn" placeholder="Fonte" maxlength="40" aria-label="Fonte de renda"><input id="rv" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Valor" aria-label="Valor da renda"></div>
-    <label for="rd">Dia do recebimento (opcional)</label><input id="rd" type="number" inputmode="numeric" min="1" max="31" step="1" placeholder="Ex.: 5">
+    <label for="rd">Data de recebimento (opcional)</label><input id="rd" type="date">
     <button class="btn" data-add="renda">Adicionar renda</button></div>
   <div class="card"><b>Gastos fixos</b><p class="mut" id="fmes" style="margin:4px 0 0"></p><div id="lFixos"></div>
     <div class="two"><input id="fn" placeholder="Conta" maxlength="40" aria-label="Nome da conta"><input id="fv" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Valor" aria-label="Valor da conta"></div>
-    <div class="two"><div><label for="fd">Dia do vencimento</label><input id="fd" type="number" inputmode="numeric" min="1" max="31" step="1" placeholder="Ex.: 10"></div><div><label for="fnp">Parcelas (opcional)</label><input id="fnp" type="number" inputmode="numeric" min="1" max="600" step="1" placeholder="Ex.: 12"></div></div>
-    <p class="mut" style="margin:4px 0 0;font-size:.8rem">Parcelas: deixe vazio para cobrar todo mês. Com número, a conta conta só nesse total de meses, a partir do mês selecionado no Resumo.</p>
+    <div class="two"><div><label for="fd">Data de vencimento</label><input id="fd" type="date"></div><div><label for="fnp">Parcelas (opcional)</label><input id="fnp" type="number" inputmode="numeric" min="1" max="600" step="1" placeholder="Ex.: 12"></div></div>
+    <p class="mut" style="margin:4px 0 0;font-size:.8rem">Parcelas: deixe vazio para cobrar todo mês. Com número, a conta vale só nesse total de meses, começando no mês da data escolhida (ou no mês do Resumo, se não escolher data).</p>
     <p class="mut" style="margin:6px 0 0;font-size:.8rem">Para marcar como paga e informar o banco, use a tela <b>Resumo</b>.</p>
     <button class="btn" data-add="fixos">Adicionar gasto fixo</button></div>
 </section>
@@ -433,7 +433,7 @@ document.querySelectorAll("nav button").forEach(function(b){b.onclick=function()
 $("mes").onchange=draw;
 $("mPrev").onclick=function(){stepMes(-1)};$("mNext").onclick=function(){stepMes(1)};
 $("addG").onclick=function(){var v=parseFloat($("gv").value);if(!(v>0)||!$("gd").value||$("gc").value==="__nova"){$("gv").focus();return}S.gastos.push({d:$("gd").value,c:$("gc").value,n:$("gn").value.trim(),v:v,p:false});$("gv").value="";$("gn").value="";save();draw()};
-document.querySelectorAll("[data-add]").forEach(function(b){b.onclick=function(){var t=b.dataset.add,p=t==="renda"?"r":"f",n=$(p+"n").value.trim(),v=parseFloat($(p+"v").value);if(!n||!(v>0))return;var it={n:n,v:v},dd=parseInt($(p+"d").value,10);if(dd>=1&&dd<=31)it.dia=dd;$(p+"d").value="";if(t==="fixos"){var np=parseInt($("fnp").value,10);if(np>0){it.np=Math.min(np,600);it.ini=$("mes").value}$("fnp").value=""}S[t].push(it);$(p+"n").value="";$(p+"v").value="";save();draw()}});
+document.querySelectorAll("[data-add]").forEach(function(b){b.onclick=function(){var t=b.dataset.add,p=t==="renda"?"r":"f",n=$(p+"n").value.trim(),v=parseFloat($(p+"v").value);if(!n||!(v>0))return;var it={n:n,v:v},dv=$(p+"d").value;if(dv){it.data=dv;it.dia=+dv.slice(8,10)}$(p+"d").value="";if(t==="fixos"){var np=parseInt($("fnp").value,10);if(np>0){it.np=Math.min(np,600);it.ini=it.data?it.data.slice(0,7):$("mes").value}$("fnp").value=""}S[t].push(it);$(p+"n").value="";$(p+"v").value="";save();draw()}});
 $("dReset").onclick=function(){if(!S.desafio.length)return;if(!confirm("Zerar todos os depósitos marcados no desafio?"))return;S.desafio=[];save();drawD()};
 $("addM").onclick=function(){var n=$("mn").value.trim(),a=parseFloat($("ma").value);if(!n||!(a>0))return;S.metas.push({n:n,a:a,g:parseFloat($("mg").value)||0,p:parseFloat($("mp").value)||0});["mn","ma","mg","mp"].forEach(function(i){$(i).value=""});$("dNova").open=false;save();draw()};
 var EDT=null;
@@ -451,7 +451,7 @@ function ed(arr,i){
      +fld("e3","Já guardado (R$)",x.g,"number",'inputmode="decimal" min="0" step="0.01"')+fld("e4","Aporte mensal (R$)",x.p,"number",'inputmode="decimal" min="0" step="0.01"');
   }else{
     h=fld("e1",arr==="renda"?"Fonte":"Conta",x.n,"text",'maxlength="40"')+fld("e2","Valor (R$)",x.v,"number",'inputmode="decimal" min="0" step="0.01"');
-    h+=fld("e6",arr==="renda"?"Dia do recebimento (opcional)":"Dia do vencimento (opcional)",x.dia||"","number",'inputmode="numeric" min="1" max="31" step="1"');
+    var mq6=$("mes").value,dm6=new Date(+mq6.slice(0,4),+mq6.slice(5,7),0).getDate();h+=fld("e6",arr==="renda"?"Data de recebimento (opcional)":"Data de vencimento (opcional)",x.data||(x.dia?mq6+"-"+String(Math.min(x.dia,dm6)).padStart(2,"0"):""),"date");
     if(arr==="fixos"){var mq=$("mes").value;h+=fld("e3","Total de parcelas (vazio = todo mês)",x.np||"","number",'inputmode="numeric" min="1" max="600" step="1"')+fld("e5","Primeira parcela em",x.ini||mq,"month")+(fixPago(x)?fld("e4","Banco deste mês",(x.bk&&x.bk[mq])||"","text",'maxlength="30" list="bks" autocomplete="off"'):"")}
   }
   $("mdf").innerHTML=h;$("md").classList.add("on");$("e1").focus();
@@ -469,7 +469,7 @@ $("mdok").onclick=function(){
     var old=S.cats[EDT.i];S.gastos.forEach(function(g){if(g.c===old)g.c=nm});S.cats[EDT.i]=nm}
   else if(a==="gastos"){var v=parseFloat($("e2").value);if(!(v>0)||!$("e1").value){$("e2").focus();return}x.d=$("e1").value;x.v=v;x.c=$("e3").value;x.n=$("e4").value.trim();if($("e5")){var b5=$("e5").value.trim();if(b5)x.b=b5;else delete x.b}}
   else if(a==="metas"){var n=$("e1").value.trim(),t=parseFloat($("e2").value);if(!n||!(t>0)){$("e1").focus();return}x.n=n;x.a=t;x.g=parseFloat($("e3").value)||0;x.p=parseFloat($("e4").value)||0}
-  else{var n2=$("e1").value.trim(),v2=parseFloat($("e2").value);if(!n2||!(v2>0)){$("e1").focus();return}x.n=n2;x.v=v2;var dq=parseInt($("e6").value,10);if(dq>=1&&dq<=31)x.dia=dq;else delete x.dia;if(a==="fixos"){var q=parseInt($("e3").value,10);if(q>0){x.np=Math.min(q,600);x.ini=$("e5").value||$("mes").value}else{delete x.np;delete x.ini}if($("e4")){var mq2=$("mes").value,b4=$("e4").value.trim();x.bk=x.bk||{};if(b4)x.bk[mq2]=b4;else delete x.bk[mq2]}}}
+  else{var n2=$("e1").value.trim(),v2=parseFloat($("e2").value);if(!n2||!(v2>0)){$("e1").focus();return}x.n=n2;x.v=v2;var dq=$("e6").value;if(dq){x.data=dq;x.dia=+dq.slice(8,10)}else{delete x.data;delete x.dia};if(a==="fixos"){var q=parseInt($("e3").value,10);if(q>0){x.np=Math.min(q,600);x.ini=$("e5").value||$("mes").value}else{delete x.np;delete x.ini}if($("e4")){var mq2=$("mes").value,b4=$("e4").value.trim();x.bk=x.bk||{};if(b4)x.bk[mq2]=b4;else delete x.bk[mq2]}}}
   save();closeM();draw();
 };
 function dc(i){
